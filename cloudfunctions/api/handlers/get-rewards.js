@@ -1,24 +1,50 @@
-const { DEFAULT_REWARD_PRESETS } = require('../common/templates');
+const { collections, DEFAULT_FAMILY_ID, ensureDefaultSeed, getWeekStartDate } = require('../common/db');
 const { buildFamilyPk } = require('../common/summary-service');
 
 async function getRewards({ payload }) {
+  await ensureDefaultSeed(collections);
+
   const childId = payload.childId || 'child-younger';
-  const balances = {
-    'child-older': 12,
-    'child-younger': 10
-  };
-  const pk = buildFamilyPk([
-    { childId: 'child-older', childName: '姐姐', totalPoints: 12, completionRate: 0.8, streakDays: 5 },
-    { childId: 'child-younger', childName: '弟弟', totalPoints: 10, completionRate: 1, streakDays: 4 }
-  ]);
+  const rewardsResult = await collections.rewardRules.where({ familyId: DEFAULT_FAMILY_ID }).get();
+  const ledgersResult = await collections.pointLedgers.where({ familyId: DEFAULT_FAMILY_ID, childId }).get();
+  const balance = ledgersResult.data.reduce((sum, item) => sum + item.deltaPoints, 0);
+  const membersResult = await collections.members.where({ familyId: DEFAULT_FAMILY_ID, isChild: true }).get();
+  const weekStartDate = getWeekStartDate();
+  const pkSource = [];
+
+  for (const member of membersResult.data) {
+    const tasks = await collections.dailyTasks.where({
+      familyId: DEFAULT_FAMILY_ID,
+      childId: member.memberId,
+      weeklyPlanId: `${member.memberId}_${weekStartDate}`
+    }).get();
+    const records = await collections.taskRecords.where({
+      familyId: DEFAULT_FAMILY_ID,
+      childId: member.memberId
+    }).get();
+    const memberLedgers = await collections.pointLedgers.where({
+      familyId: DEFAULT_FAMILY_ID,
+      childId: member.memberId
+    }).get();
+
+    const completed = records.data.filter((record) => record.result === 'completed').length;
+    pkSource.push({
+      childId: member.memberId,
+      childName: member.displayName,
+      totalPoints: memberLedgers.data.reduce((sum, item) => sum + item.deltaPoints, 0),
+      completionRate: tasks.data.length ? completed / tasks.data.length : 0,
+      streakDays: completed
+    });
+  }
+
+  const pk = pkSource.length ? buildFamilyPk(pkSource) : null;
 
   return {
     childId,
-    balance: balances[childId] || 0,
-    rewards: DEFAULT_REWARD_PRESETS.map((reward, index) => ({
-      rewardRuleId: `reward-${index + 1}`,
-      ...reward
-    })),
+    balance,
+    rewards: rewardsResult.data
+      .filter((reward) => reward.scopeType === 'family' || reward.childId === childId)
+      .sort((left, right) => left.sortOrder - right.sortOrder),
     pk
   };
 }

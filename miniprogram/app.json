@@ -12,6 +12,26 @@
     "navigationBarBackgroundColor": "#f8f7f1",
     "backgroundColor": "#f8f7f1"
   },
+  "tabBar": {
+    "color": "#6b7280",
+    "selectedColor": "#166534",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/today/index",
+        "text": "今日"
+      },
+      {
+        "pagePath": "pages/rewards/index",
+        "text": "奖励"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

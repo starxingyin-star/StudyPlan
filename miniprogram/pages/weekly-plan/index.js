@@ -21,14 +21,19 @@ Page({
     pinActionName: ''
   },
 
-  onShow() {
-    const currentChildId = getCurrentChildId();
+  async onShow() {
+    const bootstrap = await callApi('bootstrapFamily');
+    const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
+    const currentChildId = getCurrentChildId() || 'child-younger';
+    const result = await callApi('getWeeklyPlan', {
+      childId: currentChildId,
+      weekStartDate: this.data.weekStartDate
+    });
     this.setData({
-      currentChildId: currentChildId || 'child-younger',
-      children: [
-        { memberId: 'child-older', displayName: '姐姐' },
-        { memberId: 'child-younger', displayName: '弟弟' }
-      ]
+      currentChildId: currentChildId || (childMembers[0] && childMembers[0].memberId),
+      children: childMembers,
+      planDays: result.days || {},
+      tasks: (result.days && result.days[this.data.activeDay]) || []
     });
   },
 
@@ -80,6 +85,7 @@ Page({
     const { childId } = event.detail;
     setCurrentChildId(childId);
     this.setData({ currentChildId: childId });
+    this.onShow();
   },
 
   onTapDay(event) {

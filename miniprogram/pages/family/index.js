@@ -10,6 +10,15 @@ Page({
     pinActionName: ''
   },
 
+  async onShow() {
+    const bootstrap = await callApi('bootstrapFamily');
+    this.setData({
+      familyName: bootstrap.family ? bootstrap.family.familyName : '',
+      members: bootstrap.members || [],
+      rewards: bootstrap.rewardPresets || []
+    });
+  },
+
   async onTapSaveSettings() {
     try {
       const pin = await requirePin(this, '保存家庭设置');

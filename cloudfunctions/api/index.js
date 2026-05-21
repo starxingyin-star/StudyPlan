@@ -2,6 +2,7 @@ const cloud = require('wx-server-sdk');
 const { bootstrapFamily } = require('./handlers/bootstrap-family');
 const { getToday } = require('./handlers/get-today');
 const { getRewards } = require('./handlers/get-rewards');
+const { getWeeklyPlan } = require('./handlers/get-weekly-plan');
 const { saveWeeklyPlan } = require('./handlers/save-weekly-plan');
 const { saveTaskRecord } = require('./handlers/save-task-record');
 const { getWeeklyReview } = require('./handlers/get-weekly-review');
@@ -14,6 +15,7 @@ const handlers = {
   bootstrapFamily,
   getToday,
   getRewards,
+  getWeeklyPlan,
   saveWeeklyPlan,
   saveTaskRecord,
   getWeeklyReview,

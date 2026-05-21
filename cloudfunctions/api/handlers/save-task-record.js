@@ -1,45 +1,10 @@
+const { collections, DEFAULT_FAMILY_ID, ensureDefaultSeed, getDocOrNull, setDoc } = require('../common/db');
 const { buildTaskRecordChange } = require('../common/record-service');
 
-const DEMO_TASKS = {
-  'older-reading': {
-    dailyTaskId: 'older-reading',
-    childId: 'child-older',
-    points: 2,
-    isRequired: true,
-    taskDate: '2026-05-21'
-  },
-  'older-math': {
-    dailyTaskId: 'older-math',
-    childId: 'child-older',
-    points: 2,
-    isRequired: true,
-    taskDate: '2026-05-21'
-  },
-  'older-english': {
-    dailyTaskId: 'older-english',
-    childId: 'child-older',
-    points: 1,
-    isRequired: true,
-    taskDate: '2026-05-21'
-  },
-  'younger-writing': {
-    dailyTaskId: 'younger-writing',
-    childId: 'child-younger',
-    points: 2,
-    isRequired: true,
-    taskDate: '2026-05-21'
-  },
-  'younger-reading': {
-    dailyTaskId: 'younger-reading',
-    childId: 'child-younger',
-    points: 1,
-    isRequired: true,
-    taskDate: '2026-05-21'
-  }
-};
-
 async function saveTaskRecord({ payload }) {
-  const task = DEMO_TASKS[payload.dailyTaskId];
+  await ensureDefaultSeed(collections);
+
+  const task = await getDocOrNull(collections.dailyTasks, payload.dailyTaskId);
 
   if (!task) {
     throw new Error('Task not found');
@@ -54,6 +19,29 @@ async function saveTaskRecord({ payload }) {
     memberId: payload.memberId || 'member-grandmother',
     isPausedDay: Boolean(payload.isPausedDay)
   });
+
+  const taskRecordId = `${task.dailyTaskId}_${task.taskDate}`;
+  await setDoc(collections.taskRecords, taskRecordId, {
+    ...change.taskRecord,
+    taskRecordId,
+    familyId: DEFAULT_FAMILY_ID
+  });
+
+  const pointLedgerId = `task_${task.dailyTaskId}_${task.taskDate}`;
+  if (change.pointLedger) {
+    await setDoc(collections.pointLedgers, pointLedgerId, {
+      ...change.pointLedger,
+      pointLedgerId,
+      familyId: DEFAULT_FAMILY_ID,
+      createdAt: new Date().toISOString()
+    });
+  } else {
+    try {
+      await collections.pointLedgers.doc(pointLedgerId).remove();
+    } catch (error) {
+      // ignore absent ledgers
+    }
+  }
 
   return {
     ok: true,

@@ -11,15 +11,14 @@ Page({
   },
 
   async onShow() {
-    const currentChildId = getCurrentChildId() || this.data.currentChildId;
+    const bootstrap = await callApi('bootstrapFamily');
+    const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
+    const currentChildId = getCurrentChildId() || this.data.currentChildId || (childMembers[0] && childMembers[0].memberId);
     const result = await callApi('getRewards', { childId: currentChildId });
 
     this.setData({
       currentChildId,
-      children: [
-        { memberId: 'child-older', displayName: '姐姐' },
-        { memberId: 'child-younger', displayName: '弟弟' }
-      ],
+      children: childMembers,
       balance: result.balance,
       rewards: result.rewards,
       pk: result.pk
@@ -39,8 +38,7 @@ Page({
       childId: this.data.currentChildId,
       rewardRuleId,
       title,
-      thresholdValue: Number(threshold),
-      currentPoints: this.data.balance
+      thresholdValue: Number(threshold)
     });
 
     this.setData({

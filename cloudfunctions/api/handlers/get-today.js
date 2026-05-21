@@ -1,47 +1,37 @@
-const demoToday = {
-  'child-older': {
-    tasks: [
-      { dailyTaskId: 'older-reading', title: '阅读', durationMin: 20, points: 2 },
-      { dailyTaskId: 'older-math', title: '口算', durationMin: 10, points: 2 },
-      { dailyTaskId: 'older-english', title: '英语朗读', durationMin: 10, points: 1 }
-    ],
-    summary: {
-      totalTasks: 3,
-      completedTasks: 1,
-      streakDays: 5,
-      totalPoints: 12
-    }
-  },
-  'child-younger': {
-    tasks: [
-      { dailyTaskId: 'younger-writing', title: '练字', durationMin: 15, points: 2 },
-      { dailyTaskId: 'younger-reading', title: '朗读', durationMin: 10, points: 1 }
-    ],
-    summary: {
-      totalTasks: 2,
-      completedTasks: 0,
-      streakDays: 4,
-      totalPoints: 10
-    }
-  }
-};
+const { collections, DEFAULT_FAMILY_ID, ensureDefaultSeed } = require('../common/db');
 
 async function getToday({ payload }) {
+  await ensureDefaultSeed(collections);
+
   const childId = payload.childId || 'child-younger';
-  const result = demoToday[childId] || {
-    tasks: [],
-    summary: {
-      totalTasks: 0,
-      completedTasks: 0,
-      streakDays: 0,
-      totalPoints: 0
-    }
-  };
+  const today = new Date().toISOString().slice(0, 10);
+  const tasksResult = await collections.dailyTasks.where({
+    familyId: DEFAULT_FAMILY_ID,
+    childId,
+    taskDate: today
+  }).get();
+  const recordsResult = await collections.taskRecords.where({
+    familyId: DEFAULT_FAMILY_ID,
+    childId,
+    taskDate: today
+  }).get();
+  const ledgersResult = await collections.pointLedgers.where({
+    familyId: DEFAULT_FAMILY_ID,
+    childId
+  }).get();
+
+  const completedTasks = recordsResult.data.filter((record) => record.result === 'completed').length;
+  const totalPoints = ledgersResult.data.reduce((sum, item) => sum + item.deltaPoints, 0);
 
   return {
     childId,
-    tasks: result.tasks,
-    summary: result.summary
+    tasks: tasksResult.data.sort((left, right) => left.sortOrder - right.sortOrder),
+    summary: {
+      totalTasks: tasksResult.data.length,
+      completedTasks,
+      streakDays: 0,
+      totalPoints
+    }
   };
 }
 
