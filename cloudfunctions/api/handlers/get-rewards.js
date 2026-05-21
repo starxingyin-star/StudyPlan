@@ -7,6 +7,7 @@ async function getRewards({ payload }) {
   const childId = payload.childId || 'child-younger';
   const rewardsResult = await collections.rewardRules.where({ familyId: DEFAULT_FAMILY_ID }).get();
   const ledgersResult = await collections.pointLedgers.where({ familyId: DEFAULT_FAMILY_ID, childId }).get();
+  const redemptionsResult = await collections.rewardRedemptions.where({ familyId: DEFAULT_FAMILY_ID, childId }).get();
   const balance = ledgersResult.data.reduce((sum, item) => sum + item.deltaPoints, 0);
   const membersResult = await collections.members.where({ familyId: DEFAULT_FAMILY_ID, isChild: true }).get();
   const weekStartDate = getWeekStartDate();
@@ -45,7 +46,10 @@ async function getRewards({ payload }) {
     rewards: rewardsResult.data
       .filter((reward) => reward.scopeType === 'family' || reward.childId === childId)
       .sort((left, right) => left.sortOrder - right.sortOrder),
-    pk
+    pk,
+    recentRedemptions: redemptionsResult.data
+      .sort((left, right) => String(right.requestedAt || '').localeCompare(String(left.requestedAt || '')))
+      .slice(0, 5)
   };
 }
 

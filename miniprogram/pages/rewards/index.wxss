@@ -23,3 +23,13 @@
   font-weight: 700;
   margin-bottom: 12rpx;
 }
+
+.history-item + .history-item {
+  margin-top: 16rpx;
+}
+
+.history-sub {
+  margin-top: 8rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+}

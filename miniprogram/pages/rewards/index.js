@@ -7,7 +7,8 @@ Page({
     currentChildId: 'child-younger',
     balance: 0,
     rewards: [],
-    pk: null
+    pk: null,
+    recentRedemptions: []
   },
 
   async onShow() {
@@ -21,7 +22,8 @@ Page({
       children: childMembers,
       balance: result.balance,
       rewards: result.rewards,
-      pk: result.pk
+      pk: result.pk,
+      recentRedemptions: result.recentRedemptions || []
     });
   },
 

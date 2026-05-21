@@ -13,6 +13,7 @@ function buildRewardRedemption({
     redemption: {
       childId,
       rewardRuleId: rewardRule.rewardRuleId,
+      rewardTitle: rewardRule.title,
       status: 'approved',
       pointsSpent: rewardRule.thresholdValue,
       requestedAt,

@@ -11,6 +11,16 @@
     </view>
   </block>
 
+  <view class="card" wx:if="{{recentRedemptions.length}}">
+    <view class="task-title">最近兑换</view>
+    <block wx:for="{{recentRedemptions}}" wx:key="requestedAt">
+      <view class="history-item">
+        <view>{{item.rewardTitle || item.rewardRuleId}}</view>
+        <view class="history-sub">扣除 {{item.pointsSpent}} 分 · {{item.status}}</view>
+      </view>
+    </block>
+  </view>
+
   <view class="card" wx:if="{{pk}}">
     <view class="task-title">本周家庭 PK</view>
     <view>积分领先：{{pk.pointsLeader.childName}}</view>

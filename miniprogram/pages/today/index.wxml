@@ -11,8 +11,14 @@
 
   <block wx:for="{{tasks}}" wx:key="dailyTaskId">
     <view class="card">
-      <view class="task-title">{{item.title}}</view>
+      <view class="task-head">
+        <view class="task-title">{{item.title}}</view>
+        <view class="status {{item.currentResult || 'pending'}}">
+          {{item.isPausedDay ? '已暂停' : (item.currentResult === 'completed' ? '已完成' : item.currentResult === 'partial' ? '部分完成' : item.currentResult === 'missed' ? '未完成' : '待记录')}}
+        </view>
+      </view>
       <view>{{item.durationMin}} 分钟 · +{{item.points}} 分</view>
+      <view wx:if="{{item.currentComment}}" class="comment">备注：{{item.currentComment}}</view>
       <button class="action-btn" data-task-id="{{item.dailyTaskId}}" bindtap="onToggleTask">记录状态</button>
 
       <view wx:if="{{expandedTaskId === item.dailyTaskId}}" class="task-panel">

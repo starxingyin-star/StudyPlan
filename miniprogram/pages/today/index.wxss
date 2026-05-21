@@ -15,6 +15,47 @@
   margin-bottom: 12rpx;
 }
 
+.task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.status {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 22rpx;
+}
+
+.status.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.partial {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.missed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status.pending {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.comment {
+  margin-top: 12rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
 .action-btn {
   margin-top: 16rpx;
 }

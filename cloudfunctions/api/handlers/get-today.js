@@ -22,12 +22,24 @@ async function getToday({ payload }) {
 
   const completedTasks = recordsResult.data.filter((record) => record.result === 'completed').length;
   const totalPoints = ledgersResult.data.reduce((sum, item) => sum + item.deltaPoints, 0);
+  const recordMap = new Map(recordsResult.data.map((record) => [record.dailyTaskId, record]));
+  const tasks = tasksResult.data
+    .sort((left, right) => left.sortOrder - right.sortOrder)
+    .map((task) => {
+      const record = recordMap.get(task.dailyTaskId);
+      return {
+        ...task,
+        currentResult: record ? record.result : '',
+        currentComment: record ? record.comment : '',
+        isPausedDay: Boolean(record && record.pauseReason === 'paused-day')
+      };
+    });
 
   return {
     childId,
-    tasks: tasksResult.data.sort((left, right) => left.sortOrder - right.sortOrder),
+    tasks,
     summary: {
-      totalTasks: tasksResult.data.length,
+      totalTasks: tasks.length,
       completedTasks,
       streakDays: 0,
       totalPoints
