@@ -2,4 +2,18 @@ page {
   background: #f8f7f1;
   color: #1f2937;
   font-family: sans-serif;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 140rpx);
+  box-sizing: border-box;
+}
+
+button {
+  border: none;
+  border-radius: 20rpx;
+  background: #1fb87c;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+button::after {
+  border: none;
 }

@@ -15,7 +15,14 @@ Page({
     nextRewardTitle: ''
   },
 
-  async onShow() {
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
+    this.loadPage();
+  },
+
+  async loadPage() {
     const bootstrap = await callApi('bootstrapFamily');
     const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
     const currentChildId = getCurrentChildId() || this.data.currentChildId || (childMembers[0] && childMembers[0].memberId);
@@ -45,7 +52,7 @@ Page({
     const { childId } = event.detail;
     setCurrentChildId(childId);
     this.setData({ currentChildId: childId });
-    this.onShow();
+    this.loadPage();
   },
 
   async onTapRedeem(event) {
@@ -60,6 +67,6 @@ Page({
     this.setData({
       balance: this.data.balance + result.pointLedger.deltaPoints
     });
-    await this.onShow();
+    await this.loadPage();
   }
 });

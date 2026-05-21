@@ -7,6 +7,12 @@ Page({
     }
   },
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 });
+    }
+  },
+
   goToWeeklyPlan() {
     wx.navigateTo({ url: '/pages/weekly-plan/index' });
   },

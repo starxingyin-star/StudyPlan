@@ -21,7 +21,14 @@ Page({
     remainingTasks: 0
   },
 
-  async onShow() {
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
+    this.loadPage();
+  },
+
+  async loadPage() {
     const bootstrap = await callApi('bootstrapFamily');
     const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
     const currentChildId = getCurrentChildId() || this.data.currentChildId || (childMembers[0] && childMembers[0].memberId);
@@ -56,7 +63,7 @@ Page({
     const { childId } = event.detail;
     setCurrentChildId(childId);
     this.setData({ currentChildId: childId });
-    this.onShow();
+    this.loadPage();
   },
 
   onToggleTask(event) {
@@ -84,7 +91,7 @@ Page({
       isPausedDay: Boolean(paused),
       comment
     });
-    await this.onShow();
+    await this.loadPage();
     this.setData({
       expandedTaskId: '',
       noteDrafts: {
