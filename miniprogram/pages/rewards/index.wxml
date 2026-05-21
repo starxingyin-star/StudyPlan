@@ -1,12 +1,28 @@
 <view class="page">
   <child-switcher children="{{children}}" currentChildId="{{currentChildId}}" bind:change="onChildChange" />
 
-  <view class="hero">当前积分：{{balance}}</view>
+  <view class="hero">
+    <view class="hero-eyebrow">{{familyName}}</view>
+    <view class="hero-title">{{currentChildName || '当前孩子'}}的奖励账户</view>
+    <view class="hero-score">{{balance}}</view>
+    <view class="hero-desc">
+      {{redeemableCount ? '现在可以直接兑换 ' + redeemableCount + ' 个奖励' : (nextRewardTitle ? '再努力一点，就能兑换「' + nextRewardTitle + '」' : '继续完成任务，积累第一笔积分')}}
+    </view>
+  </view>
+
+  <view class="section-title">可兑换奖励</view>
 
   <block wx:for="{{rewards}}" wx:key="rewardRuleId">
-    <view class="card">
-      <view class="task-title">{{item.title}}</view>
-      <view>需要 {{item.thresholdValue}} 分</view>
+    <view class="reward-card">
+      <view class="reward-top">
+        <view>
+          <view class="task-title">{{item.title}}</view>
+          <view class="reward-meta">需要 {{item.thresholdValue}} 分</view>
+        </view>
+        <view class="reward-badge {{balance >= item.thresholdValue ? 'active' : ''}}">
+          {{balance >= item.thresholdValue ? '可兑换' : '未达成'}}
+        </view>
+      </view>
       <button data-reward-rule-id="{{item.rewardRuleId}}" data-title="{{item.title}}" data-threshold="{{item.thresholdValue}}" bindtap="onTapRedeem">兑换</button>
     </view>
   </block>
@@ -23,8 +39,8 @@
 
   <view class="card" wx:if="{{pk}}">
     <view class="task-title">本周家庭 PK</view>
-    <view>积分领先：{{pk.pointsLeader.childName}}</view>
-    <view>完成率最佳：{{pk.completionLeader.childName}}</view>
-    <view>坚持之星：{{pk.streakLeader.childName}}</view>
+    <view class="pk-item">积分领先：{{pk.pointsLeader.childName}}</view>
+    <view class="pk-item">完成率最佳：{{pk.completionLeader.childName}}</view>
+    <view class="pk-item">坚持之星：{{pk.streakLeader.childName}}</view>
   </view>
 </view>

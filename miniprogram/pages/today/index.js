@@ -3,8 +3,10 @@ const { getCurrentChildId, setCurrentChildId } = require('../../utils/store');
 
 Page({
   data: {
+    familyName: '',
     children: [],
     currentChildId: 'child-younger',
+    currentChildName: '',
     summary: {
       totalTasks: 0,
       completedTasks: 0,
@@ -13,7 +15,10 @@ Page({
     },
     tasks: [],
     expandedTaskId: '',
-    noteDrafts: {}
+    noteDrafts: {},
+    completionPercent: 0,
+    encouragement: '',
+    remainingTasks: 0
   },
 
   async onShow() {
@@ -21,12 +26,29 @@ Page({
     const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
     const currentChildId = getCurrentChildId() || this.data.currentChildId || (childMembers[0] && childMembers[0].memberId);
     const result = await callApi('getToday', { childId: currentChildId });
+    const currentChild = childMembers.find((member) => member.memberId === currentChildId) || childMembers[0] || {};
+    const summary = result.summary || this.data.summary;
+    const completionPercent = summary.totalTasks ? Math.round((summary.completedTasks / summary.totalTasks) * 100) : 0;
+    const remainingTasks = Math.max((summary.totalTasks || 0) - (summary.completedTasks || 0), 0);
+    let encouragement = '先完成一项，拿到今天的第一分。';
+    if (completionPercent === 100 && summary.totalTasks) {
+      encouragement = '今天任务已经完成，可以去奖励页看看能兑换什么。';
+    } else if (completionPercent >= 50) {
+      encouragement = '已经过半，再坚持一下就能完成今天目标。';
+    } else if (summary.totalTasks === 0) {
+      encouragement = '今天还没有任务，先去本周计划里安排一下。';
+    }
 
     this.setData({
       currentChildId,
+      currentChildName: currentChild.displayName || '',
+      familyName: bootstrap.family ? bootstrap.family.familyName : '我们一家',
       children: childMembers,
-      summary: result.summary || this.data.summary,
-      tasks: result.tasks || []
+      summary,
+      tasks: result.tasks || [],
+      completionPercent,
+      encouragement,
+      remainingTasks
     });
   },
 
