@@ -13,6 +13,7 @@
     <view class="card">
       <view class="task-title">{{item.title}}</view>
       <view>{{item.durationMin}} 分钟 · +{{item.points}} 分</view>
+      <button class="action-btn" data-task-id="{{item.dailyTaskId}}" bindtap="onTapComplete">完成</button>
     </view>
   </block>
 </view>

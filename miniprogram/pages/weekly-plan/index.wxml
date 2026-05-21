@@ -3,7 +3,7 @@
 
   <view class="tabs">
     <block wx:for="{{dayTabs}}" wx:key="date">
-      <view class="tab {{item.date === activeDay ? 'active' : ''}}">{{item.label}}</view>
+      <view class="tab {{item.date === activeDay ? 'active' : ''}}" data-date="{{item.date}}" bindtap="onTapDay">{{item.label}}</view>
     </block>
   </view>
 

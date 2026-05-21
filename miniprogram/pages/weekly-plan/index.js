@@ -6,9 +6,16 @@ Page({
   data: {
     children: [],
     currentChildId: '',
-    weekStartDate: '',
-    dayTabs: [],
-    activeDay: '',
+    weekStartDate: '2026-05-25',
+    dayTabs: [
+      { date: '2026-05-25', label: '一' },
+      { date: '2026-05-26', label: '二' },
+      { date: '2026-05-27', label: '三' },
+      { date: '2026-05-28', label: '四' },
+      { date: '2026-05-29', label: '五' }
+    ],
+    activeDay: '2026-05-25',
+    planDays: {},
     tasks: [],
     pinVisible: false,
     pinActionName: ''
@@ -16,19 +23,30 @@ Page({
 
   onShow() {
     const currentChildId = getCurrentChildId();
-    this.setData({ currentChildId });
+    this.setData({
+      currentChildId: currentChildId || 'child-younger',
+      children: [
+        { memberId: 'child-older', displayName: '姐姐' },
+        { memberId: 'child-younger', displayName: '弟弟' }
+      ]
+    });
   },
 
   async onTapSavePlan() {
     try {
       const pin = await requirePin(this, '保存本周计划');
-      await callApi('saveWeeklyPlan', {
+      const result = await callApi('saveWeeklyPlan', {
         childId: this.data.currentChildId,
         weekStartDate: this.data.weekStartDate,
-        tasks: this.data.tasks,
+        templateId: 'lower-grade-habits',
+        focusHabits: ['练字', '朗读'],
         pin
       });
-      this.setData({ pinVisible: false });
+      this.setData({
+        pinVisible: false,
+        planDays: result.days,
+        tasks: result.days[this.data.activeDay] || []
+      });
     } catch (error) {
       this.setData({ pinVisible: false });
     }
@@ -62,5 +80,13 @@ Page({
     const { childId } = event.detail;
     setCurrentChildId(childId);
     this.setData({ currentChildId: childId });
+  },
+
+  onTapDay(event) {
+    const { date } = event.currentTarget.dataset;
+    this.setData({
+      activeDay: date,
+      tasks: this.data.planDays[date] || []
+    });
   }
 });

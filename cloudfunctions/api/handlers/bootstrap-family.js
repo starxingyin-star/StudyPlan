@@ -4,6 +4,7 @@ async function bootstrapFamily() {
   return {
     family: {
       familyId: 'demo-family',
+      parentPin: '2468',
       familyName: '我们一家',
       pkEnabled: true
     },
