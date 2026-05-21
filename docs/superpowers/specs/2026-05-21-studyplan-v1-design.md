@@ -650,7 +650,7 @@ For each child, the default weekly plan should:
 
 ### 2. Point Economy Defaults
 
-V1 must provide a simple, intuitive point economy from day one.
+V1 must provide a simple, intuitive point economy from day one, but the first release should treat these values as starter defaults rather than rigid rules.
 
 #### Task point levels
 
@@ -671,7 +671,7 @@ If a child completes all required tasks for the week:
 
 - perfect week bonus: `+5` points
 
-If the family wants stronger weekly reinforcement later, that can be tuned, but V1 should start conservative.
+If the family wants stronger weekly reinforcement later, that can be tuned. V1 should start conservative and make later adjustment easy.
 
 #### Reward price defaults
 
@@ -692,27 +692,29 @@ Points should feel like savings, not disposable daily tokens.
 - reward redemption subtracts from that balance
 - point history remains auditable through the ledger
 
+The product should assume that early families will tune point values and reward prices in real use. V1 only needs one sensible default version, not a perfect final economy.
+
 ### 3. Family Operating Roles
 
-The app cannot replace family discipline. V1 should be designed around a default execution rhythm.
+The app cannot replace family discipline, but V1 does not need to hard-enforce a strict household workflow. It should provide a recommended execution rhythm that families can follow loosely.
 
 #### Weekly responsibility
 
-- Sunday evening: parent reviews weekly summary and creates or adjusts the next week's plan
+- Suggested default: one adult reviews weekly summary and creates or adjusts the next week's plan, often on Sunday evening
 
 #### Weekday responsibility
 
-- Monday to Friday: grandparents or parents record task completion
+- Suggested default: grandparents or parents record task completion on weekdays
 
 #### Reward responsibility
 
-- parents confirm redemption and fulfillment of rewards
+- Suggested default: an adult confirms redemption and fulfillment of rewards
 
-This default rhythm should be reflected in copy and onboarding, because clarity of responsibility is essential for habit consistency.
+This should be presented as a helpful recommendation in copy and onboarding, not as a strict process the family must follow.
 
 ### 4. Completion Quality Rules
 
-V1 needs simple completion standards to avoid family conflict and inconsistent scoring.
+V1 needs lightweight completion states, but it does not need strict quality enforcement in the first release.
 
 #### Default standard
 
@@ -724,18 +726,18 @@ Each task can be marked:
 
 #### Suggested interpretation
 
-- `completed`: the child finished the expected task in a basically acceptable way
-- `partial`: the child attempted it but did not meet the expected level or time
-- `missed`: the task was not meaningfully done
+- `completed`: the family considers the task done for the day
+- `partial`: the family wants to note that it was attempted but not fully done
+- `missed`: the family considers the task not done
 
 #### Habit-specific guidance
 
-V1 should include suggested family guidance for common tasks:
+V1 may include suggested family guidance for common tasks, but these should be treated as soft examples rather than hard standards:
 
 - 朗读 completed: read the assigned content for the intended duration with reasonable engagement
 - 练字 completed: completed the assigned writing amount, not merely sat with the workbook open
 
-These are not machine-enforced rules, but they should appear in task instructions or onboarding guidance.
+These are not machine-enforced rules. Families may ignore or simplify them if that helps them get started.
 
 ### 5. PK Boundaries And Safety Rules
 
