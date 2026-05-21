@@ -13,7 +13,23 @@
     <view class="card">
       <view class="task-title">{{item.title}}</view>
       <view>{{item.durationMin}} 分钟 · +{{item.points}} 分</view>
-      <button class="action-btn" data-task-id="{{item.dailyTaskId}}" bindtap="onTapComplete">完成</button>
+      <button class="action-btn" data-task-id="{{item.dailyTaskId}}" bindtap="onToggleTask">记录状态</button>
+
+      <view wx:if="{{expandedTaskId === item.dailyTaskId}}" class="task-panel">
+        <input
+          class="note-input"
+          placeholder="备注，例如 今天读得很认真"
+          data-task-id="{{item.dailyTaskId}}"
+          value="{{noteDrafts[item.dailyTaskId]}}"
+          bindinput="onNoteInput"
+        />
+        <view class="action-grid">
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="completed" bindtap="onRecordTask">完成</button>
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="partial" bindtap="onRecordTask">部分完成</button>
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="missed" bindtap="onRecordTask">未完成</button>
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="missed" data-paused="true" bindtap="onRecordTask">暂停当天</button>
+        </view>
+      </view>
     </view>
   </block>
 </view>

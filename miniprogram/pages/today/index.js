@@ -11,7 +11,9 @@ Page({
       streakDays: 0,
       totalPoints: 0
     },
-    tasks: []
+    tasks: [],
+    expandedTaskId: '',
+    noteDrafts: {}
   },
 
   async onShow() {
@@ -35,13 +37,38 @@ Page({
     this.onShow();
   },
 
-  async onTapComplete(event) {
+  onToggleTask(event) {
     const { taskId } = event.currentTarget.dataset;
+    this.setData({
+      expandedTaskId: this.data.expandedTaskId === taskId ? '' : taskId
+    });
+  },
+
+  onNoteInput(event) {
+    const { taskId } = event.currentTarget.dataset;
+    const noteDrafts = {
+      ...this.data.noteDrafts,
+      [taskId]: event.detail.value
+    };
+    this.setData({ noteDrafts });
+  },
+
+  async onRecordTask(event) {
+    const { taskId, result, paused } = event.currentTarget.dataset;
+    const comment = this.data.noteDrafts[taskId] || '';
     await callApi('saveTaskRecord', {
       dailyTaskId: taskId,
-      result: 'completed',
-      comment: '已完成'
+      result,
+      isPausedDay: Boolean(paused),
+      comment
     });
     await this.onShow();
+    this.setData({
+      expandedTaskId: '',
+      noteDrafts: {
+        ...this.data.noteDrafts,
+        [taskId]: ''
+      }
+    });
   }
 });

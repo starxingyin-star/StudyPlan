@@ -32,4 +32,19 @@ describe('record service', () => {
     expect(change.taskRecord.pauseReason).toBe('paused-day');
     expect(change.pointLedger).toBeNull();
   });
+
+  test('stores partial completion without awarding points', () => {
+    const change = buildTaskRecordChange({
+      task: { dailyTaskId: 'task-3', childId: 'child-1', points: 3, isRequired: true, taskDate: '2026-05-21' },
+      result: 'partial',
+      comment: '做了一半',
+      recordedAt: '2026-05-21T12:00:00.000Z',
+      allowLateRecord: false,
+      memberId: 'member-1'
+    });
+
+    expect(change.taskRecord.result).toBe('partial');
+    expect(change.taskRecord.pointsAwarded).toBe(0);
+    expect(change.pointLedger).toBeNull();
+  });
 });

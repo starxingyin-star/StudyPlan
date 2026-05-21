@@ -18,3 +18,29 @@
 .action-btn {
   margin-top: 16rpx;
 }
+
+.task-panel {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #e5e7eb;
+}
+
+.note-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.small-action {
+  margin: 0;
+  font-size: 24rpx;
+}
