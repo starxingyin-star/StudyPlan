@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/today/index",
+    "pages/rewards/index",
+    "pages/mine/index",
+    "pages/weekly-plan/index",
+    "pages/weekly-review/index",
+    "pages/family/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "StudyPlan",
+    "navigationBarBackgroundColor": "#f8f7f1",
+    "backgroundColor": "#f8f7f1"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
