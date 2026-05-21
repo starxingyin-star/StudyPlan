@@ -1,7 +1,51 @@
 <view class="page">
-  <view class="card">家庭名称：{{familyName || '我们一家'}}</view>
-  <view class="card">成员数：{{members.length}}</view>
-  <view class="card">奖励规则数：{{rewards.length}}</view>
+  <view class="section-title">家庭名称</view>
+  <view class="card">
+    <input class="text-input" placeholder="家庭名称" value="{{familyName}}" bindinput="onFamilyNameInput" />
+  </view>
+
+  <view class="section-title">家庭成员</view>
+  <block wx:for="{{members}}" wx:key="memberId">
+    <view class="card">
+      <view class="row">
+        <view>
+          <view class="strong">{{item.displayName}}</view>
+          <view class="sub">{{item.relationType}}{{item.grade ? ' · ' + item.grade : ''}}</view>
+        </view>
+        <button class="small-btn" data-member-id="{{item.memberId}}" bindtap="onRemoveMember">删除</button>
+      </view>
+    </view>
+  </block>
+
+  <view class="card">
+    <view class="strong">新增成员</view>
+    <input class="text-input" placeholder="姓名，例如 哥哥 / 爷爷" value="{{newMemberName}}" bindinput="onNewMemberNameInput" />
+    <picker mode="selector" range="{{relationOptions}}" value="{{newMemberRelationIndex}}" bindchange="onNewMemberRelationChange">
+      <view class="picker">关系：{{relationOptions[newMemberRelationIndex]}}</view>
+    </picker>
+    <input wx:if="{{relationOptions[newMemberRelationIndex] === 'child'}}" class="text-input" placeholder="年级，例如 二年级" value="{{newMemberGrade}}" bindinput="onNewMemberGradeInput" />
+    <button bindtap="onAddMember">加入家庭</button>
+  </view>
+
+  <view class="section-title">奖励规则</view>
+  <block wx:for="{{rewards}}" wx:key="rewardRuleId">
+    <view class="card">
+      <input class="text-input" data-index="{{index}}" value="{{item.title}}" bindinput="onRewardTitleInput" />
+      <view class="row">
+        <input class="text-input small" type="number" data-index="{{index}}" value="{{item.thresholdValue}}" bindinput="onRewardThresholdInput" />
+        <view class="sub">积分</view>
+        <button class="small-btn" data-reward-rule-id="{{item.rewardRuleId}}" bindtap="onRemoveReward">删除</button>
+      </view>
+    </view>
+  </block>
+
+  <view class="card">
+    <view class="strong">新增奖励</view>
+    <input class="text-input" placeholder="奖励名称，例如 冰淇淋" value="{{newRewardTitle}}" bindinput="onNewRewardTitleInput" />
+    <input class="text-input" type="number" placeholder="所需积分" value="{{newRewardThreshold}}" bindinput="onNewRewardThresholdInput" />
+    <button bindtap="onAddReward">加入奖励</button>
+  </view>
+
   <button bindtap="onTapSaveSettings">保存家庭设置</button>
   <pin-sheet visible="{{pinVisible}}" title="{{pinActionName}}" bind:confirm="onPinConfirm" bind:cancel="onPinCancel" />
 </view>
