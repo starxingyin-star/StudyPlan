@@ -18,7 +18,8 @@ async function saveWeeklyPlan({ payload }) {
     childId: payload.childId,
     weekStartDate: payload.weekStartDate || '2026-05-25',
     templateId: payload.templateId || 'lower-grade-habits',
-    focusHabits: payload.focusHabits || ['练字', '朗读']
+    focusHabits: payload.focusHabits || ['练字', '朗读'],
+    tasksByDay: payload.tasksByDay || {}
   });
 
   const weeklyPlanId = `${draft.childId}_${draft.weekStartDate}`;

@@ -6,7 +6,17 @@ function addDays(isoDate, offset) {
   return date.toISOString().slice(0, 10);
 }
 
-function buildWeeklyPlanDraft({ childId, weekStartDate, templateId, focusHabits }) {
+function normalizeTasksForDay({ childId, currentDate, tasks }) {
+  return tasks.map((task, index) => ({
+    ...task,
+    taskDate: currentDate,
+    childId,
+    sortOrder: index + 1,
+    sourceType: task.sourceType || 'manual'
+  }));
+}
+
+function buildWeeklyPlanDraft({ childId, weekStartDate, templateId, focusHabits, tasksByDay = {} }) {
   const template = TEMPLATES[templateId];
   const weekdayTitles = template.weekdayTaskTitles.filter((title) => {
     return !focusHabits.length || focusHabits.includes(title) || title === '课外班';
@@ -16,6 +26,15 @@ function buildWeeklyPlanDraft({ childId, weekStartDate, templateId, focusHabits 
   for (let offset = 0; offset < 7; offset += 1) {
     const currentDate = addDays(weekStartDate, offset);
     const isWeekend = offset >= 5;
+
+    if (Array.isArray(tasksByDay[currentDate])) {
+      days[currentDate] = normalizeTasksForDay({
+        childId,
+        currentDate,
+        tasks: tasksByDay[currentDate]
+      });
+      continue;
+    }
 
     days[currentDate] = isWeekend
       ? []

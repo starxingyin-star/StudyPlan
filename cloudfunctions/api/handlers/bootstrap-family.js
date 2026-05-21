@@ -1,4 +1,5 @@
 const { collections, DEFAULT_FAMILY_ID, ensureDefaultSeed } = require('../common/db');
+const { DEFAULT_TASK_LIBRARY } = require('../common/templates');
 
 async function bootstrapFamily() {
   const family = await ensureDefaultSeed(collections);
@@ -8,7 +9,8 @@ async function bootstrapFamily() {
   return {
     family,
     members: membersResult.data,
-    rewardPresets: rewardsResult.data
+    rewardPresets: rewardsResult.data,
+    taskLibrary: DEFAULT_TASK_LIBRARY
   };
 }
 
