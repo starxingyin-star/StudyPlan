@@ -1,0 +1,10 @@
+<view wx:if="{{visible}}" class="mask">
+  <view class="sheet">
+    <view class="title">{{title || '输入家长密码'}}</view>
+    <input password value="{{value}}" bindinput="onInput" />
+    <view class="actions">
+      <button bindtap="onCancel">取消</button>
+      <button bindtap="onConfirm">确认</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="card">家庭名称：{{familyName || '我们一家'}}</view>
+  <view class="card">成员数：{{members.length}}</view>
+  <view class="card">奖励规则数：{{rewards.length}}</view>
+  <button bindtap="onTapSaveSettings">保存家庭设置</button>
+  <pin-sheet visible="{{pinVisible}}" title="{{pinActionName}}" bind:confirm="onPinConfirm" bind:cancel="onPinCancel" />
+</view>

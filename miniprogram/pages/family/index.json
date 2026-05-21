@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "pin-sheet": "/components/pin-sheet/index"
+  },
+  "navigationBarTitleText": "家庭设置"
+}

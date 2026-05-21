@@ -1,0 +1,16 @@
+<view class="page">
+  <child-switcher children="{{children}}" currentChildId="{{currentChildId}}" bind:change="onChildChange" />
+
+  <view class="tabs">
+    <block wx:for="{{dayTabs}}" wx:key="date">
+      <view class="tab {{item.date === activeDay ? 'active' : ''}}">{{item.label}}</view>
+    </block>
+  </view>
+
+  <block wx:for="{{tasks}}" wx:key="dailyTaskId">
+    <view class="card">{{item.title}} · {{item.durationMin}} 分钟 · +{{item.points}} 分</view>
+  </block>
+
+  <button bindtap="onTapSavePlan">保存本周计划</button>
+  <pin-sheet visible="{{pinVisible}}" title="{{pinActionName}}" bind:confirm="onPinConfirm" bind:cancel="onPinCancel" />
+</view>

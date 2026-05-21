@@ -1,0 +1,5 @@
+<view class="page">
+  <view class="card">本周积分：{{summary.totalPoints || 0}}</view>
+  <view class="card">完成率：{{summary.completionRate || 0}}</view>
+  <view class="card">家庭 PK：{{pk.pointsLeader.childName || ''}}</view>
+</view>

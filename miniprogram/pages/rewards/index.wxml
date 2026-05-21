@@ -1,0 +1,19 @@
+<view class="page">
+  <child-switcher children="{{children}}" currentChildId="{{currentChildId}}" bind:change="onChildChange" />
+
+  <view class="hero">当前积分：{{balance}}</view>
+
+  <block wx:for="{{rewards}}" wx:key="rewardRuleId">
+    <view class="card">
+      <view class="task-title">{{item.title}}</view>
+      <view>需要 {{item.thresholdValue}} 分</view>
+    </view>
+  </block>
+
+  <view class="card" wx:if="{{pk}}">
+    <view class="task-title">本周家庭 PK</view>
+    <view>积分领先：{{pk.pointsLeader.childName}}</view>
+    <view>完成率最佳：{{pk.completionLeader.childName}}</view>
+    <view>坚持之星：{{pk.streakLeader.childName}}</view>
+  </view>
+</view>

@@ -1,0 +1,5 @@
+<view class="page">
+  <view class="card" bindtap="goToWeeklyPlan">本周计划</view>
+  <view class="card" bindtap="goToWeeklyReview">周回顾</view>
+  <view class="card" bindtap="goToFamily">家庭成员与设置</view>
+</view>

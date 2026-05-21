@@ -1,0 +1,16 @@
+.page {
+  padding: 24rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title,
+.task-title {
+  font-weight: 700;
+  margin-bottom: 12rpx;
+}
