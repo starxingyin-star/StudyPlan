@@ -614,6 +614,157 @@ When possible, errors should offer next steps:
 - If total points are over-emphasized in PK, older children may dominate.
 - If planning becomes too flexible too early, V1 will become harder for grandparents to use.
 
+## V1 Final Operating Rules
+
+This section defines the default family rules needed to make V1 usable in real life. These are product defaults, not immutable hard rules. Families may tune them later, but V1 should ship with a complete starting system.
+
+### 1. Initial Task Templates
+
+V1 starts with a small task template library so families do not create every task from scratch.
+
+#### Lower-grade habit template
+
+Recommended defaults for a lower-grade child:
+
+- 练字: 10-15 minutes
+- 朗读: 10 minutes
+- 阅读: 15-20 minutes
+- 口算: 10 minutes
+
+#### Older-child study template
+
+Recommended defaults for an older child:
+
+- 阅读: 20 minutes
+- 口算: 10-15 minutes
+- 英语朗读: 10 minutes
+- 课外班复盘: 5-10 minutes
+
+#### Weekly planning default
+
+For each child, the default weekly plan should:
+
+- place `练字` and `朗读` on weekday slots by default if selected as focus habits
+- allow lighter or no required tasks on weekends unless the family explicitly adds them
+- start narrow rather than overload the child
+
+### 2. Point Economy Defaults
+
+V1 must provide a simple, intuitive point economy from day one.
+
+#### Task point levels
+
+- easy task: `1` point
+- medium task: `2` points
+- hard task: `3` points
+
+Examples:
+
+- 朗读 10 分钟: `1`
+- 练字 15 分钟: `2`
+- 口算 10 分钟: `2`
+- 高难度额外复习任务: `3`
+
+#### Weekly bonus
+
+If a child completes all required tasks for the week:
+
+- perfect week bonus: `+5` points
+
+If the family wants stronger weekly reinforcement later, that can be tuned, but V1 should start conservative.
+
+#### Reward price defaults
+
+Suggested starting reward prices:
+
+- 冰淇淋: `5` points
+- 看电视 30 分钟: `8` points
+- 小玩具: `15` points
+- 游乐场: `30` points
+
+These examples should be included as starter presets in V1.
+
+#### Balance philosophy
+
+Points should feel like savings, not disposable daily tokens.
+
+- task completion adds to a persistent point balance
+- reward redemption subtracts from that balance
+- point history remains auditable through the ledger
+
+### 3. Family Operating Roles
+
+The app cannot replace family discipline. V1 should be designed around a default execution rhythm.
+
+#### Weekly responsibility
+
+- Sunday evening: parent reviews weekly summary and creates or adjusts the next week's plan
+
+#### Weekday responsibility
+
+- Monday to Friday: grandparents or parents record task completion
+
+#### Reward responsibility
+
+- parents confirm redemption and fulfillment of rewards
+
+This default rhythm should be reflected in copy and onboarding, because clarity of responsibility is essential for habit consistency.
+
+### 4. Completion Quality Rules
+
+V1 needs simple completion standards to avoid family conflict and inconsistent scoring.
+
+#### Default standard
+
+Each task can be marked:
+
+- completed
+- partial
+- missed
+
+#### Suggested interpretation
+
+- `completed`: the child finished the expected task in a basically acceptable way
+- `partial`: the child attempted it but did not meet the expected level or time
+- `missed`: the task was not meaningfully done
+
+#### Habit-specific guidance
+
+V1 should include suggested family guidance for common tasks:
+
+- 朗读 completed: read the assigned content for the intended duration with reasonable engagement
+- 练字 completed: completed the assigned writing amount, not merely sat with the workbook open
+
+These are not machine-enforced rules, but they should appear in task instructions or onboarding guidance.
+
+### 5. PK Boundaries And Safety Rules
+
+PK is intended to create positive momentum, not shame.
+
+#### V1 PK boundaries
+
+- only compare children inside the same family
+- no public ranking outside the family
+- no negative labels like last place or failure
+- no red/black leaderboard
+
+#### Display style
+
+Use positive multi-dimension recognition:
+
+- 本周积分领先
+- 本周完成率最佳
+- 本周坚持之星
+
+#### Family control
+
+Families can:
+
+- disable PK entirely
+- keep PK visible but make rewards independent from PK
+
+This keeps competition optional and healthy.
+
 ## Next Phase After V1
 
 V2 may expand into a fuller study planner:
