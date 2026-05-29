@@ -69,9 +69,15 @@ async function saveFamilySettings({ payload }) {
     });
   }
 
+  const refreshedMembers = await collections.members.where({ familyId: DEFAULT_FAMILY_ID }).get();
+  const refreshedRewards = await collections.rewardRules.where({ familyId: DEFAULT_FAMILY_ID }).get();
+
   return {
     ok: true,
-    familyId: DEFAULT_FAMILY_ID
+    familyId: DEFAULT_FAMILY_ID,
+    family: nextFamily,
+    members: refreshedMembers.data,
+    rewards: refreshedRewards.data
   };
 }
 

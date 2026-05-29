@@ -5,10 +5,9 @@ Page({
   data: {
     familyName: '',
     members: [],
-    relationOptions: ['child', 'father', 'mother', 'grandfather', 'grandmother', 'guardian'],
-    newMemberName: '',
-    newMemberRelationIndex: 0,
-    newMemberGrade: '',
+    rewards: [],
+    newRewardTitle: '',
+    newRewardThreshold: 5,
     pinVisible: false,
     pinActionName: ''
   },
@@ -17,17 +16,18 @@ Page({
     const bootstrap = await callApi('bootstrapFamily');
     this.setData({
       familyName: bootstrap.family ? bootstrap.family.familyName : '',
-      members: bootstrap.members || []
+      members: bootstrap.members || [],
+      rewards: bootstrap.rewardPresets || []
     });
   },
 
   async onTapSaveSettings() {
     try {
-      const pin = await requirePin(this, '保存家庭设置');
+      const pin = await requirePin(this, '保存奖励规则');
       const result = await callApi('saveFamilySettings', {
         familyName: this.data.familyName,
         members: this.data.members,
-        rewards: [],
+        rewards: this.data.rewards,
         pin
       });
 
@@ -56,59 +56,75 @@ Page({
     }
   },
 
-  onFamilyNameInput(event) {
+  onRewardTitleInput(event) {
+    const { index } = event.currentTarget.dataset;
+    const rewards = [...this.data.rewards];
+    rewards[index] = {
+      ...rewards[index],
+      title: event.detail.value
+    };
+    this.setData({ rewards });
+  },
+
+  onRewardThresholdInput(event) {
+    const { index } = event.currentTarget.dataset;
+    const rewards = [...this.data.rewards];
+    rewards[index] = {
+      ...rewards[index],
+      thresholdValue: Number(event.detail.value || 0)
+    };
+    this.setData({ rewards });
+  },
+
+  onNewRewardTitleInput(event) {
     this.setData({
-      familyName: event.detail.value
+      newRewardTitle: event.detail.value
     });
   },
 
-  onNewMemberNameInput(event) {
+  onNewRewardThresholdInput(event) {
     this.setData({
-      newMemberName: event.detail.value
+      newRewardThreshold: Number(event.detail.value || 0)
     });
   },
 
-  onNewMemberRelationChange(event) {
-    this.setData({
-      newMemberRelationIndex: Number(event.detail.value)
-    });
-  },
-
-  onNewMemberGradeInput(event) {
-    this.setData({
-      newMemberGrade: event.detail.value
-    });
-  },
-
-  onAddMember() {
-    const displayName = (this.data.newMemberName || '').trim();
-    const relationType = this.data.relationOptions[this.data.newMemberRelationIndex];
-    if (!displayName) {
+  onAddReward() {
+    const title = (this.data.newRewardTitle || '').trim();
+    if (!title) {
       return;
     }
 
-    const memberId = `member-${Date.now()}`;
-    const isChild = relationType === 'child';
-    const nextMembers = [...this.data.members, {
-      memberId,
-      displayName,
-      relationType,
-      isChild,
-      grade: isChild ? this.data.newMemberGrade : ''
+    const rewardRuleId = `reward-custom-${Date.now()}`;
+    const nextRewards = [...this.data.rewards, {
+      rewardRuleId,
+      title,
+      rewardType: 'item',
+      unlockMode: 'points',
+      thresholdValue: this.data.newRewardThreshold || 5,
+      scopeType: 'family',
+      childId: '',
+      enabled: true,
+      sortOrder: this.data.rewards.length + 1
     }];
 
     this.setData({
-      members: nextMembers,
-      newMemberName: '',
-      newMemberRelationIndex: 0,
-      newMemberGrade: ''
+      rewards: nextRewards,
+      newRewardTitle: '',
+      newRewardThreshold: 5
     });
   },
 
-  onRemoveMember(event) {
-    const { memberId } = event.currentTarget.dataset;
+  onRemoveReward(event) {
+    const { rewardRuleId } = event.currentTarget.dataset;
+    const nextRewards = this.data.rewards
+      .filter((reward) => reward.rewardRuleId !== rewardRuleId)
+      .map((reward, index) => ({
+        ...reward,
+        sortOrder: index + 1
+      }));
+
     this.setData({
-      members: this.data.members.filter((member) => member.memberId !== memberId)
+      rewards: nextRewards
     });
   },
 

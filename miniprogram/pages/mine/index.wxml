@@ -23,7 +23,11 @@
     <view class="entry-desc">查看积分、完成率、坚持情况和家庭内 PK。</view>
   </view>
   <view class="entry-card" bindtap="goToFamily">
-    <view class="entry-title">家庭成员与设置</view>
-    <view class="entry-desc">管理家庭名称、孩子、照看者和奖励规则。</view>
+    <view class="entry-title">家庭成员</view>
+    <view class="entry-desc">管理家庭名称、孩子和照看者。</view>
+  </view>
+  <view class="entry-card" bindtap="goToRewardSettings">
+    <view class="entry-title">奖励规则</view>
+    <view class="entry-desc">管理积分兑换项和奖励分值。</view>
   </view>
 </view>

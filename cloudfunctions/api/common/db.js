@@ -1,5 +1,6 @@
 const cloud = require('wx-server-sdk');
 const { buildWeeklyPlanDraft } = require('./plan-service');
+const { stripManagedFields } = require('./clean-doc');
 const { DEFAULT_REWARD_PRESETS } = require('./templates');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -63,8 +64,9 @@ async function getDocOrNull(collection, id) {
 }
 
 async function setDoc(collection, id, data) {
-  await collection.doc(id).set({ data });
-  return data;
+  const cleaned = stripManagedFields(data);
+  await collection.doc(id).set({ data: cleaned });
+  return cleaned;
 }
 
 async function ensureDefaultSeed(collections) {

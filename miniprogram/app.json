@@ -5,7 +5,8 @@
     "pages/mine/index",
     "pages/weekly-plan/index",
     "pages/weekly-review/index",
-    "pages/family/index"
+    "pages/family/index",
+    "pages/reward-settings/index"
   ],
   "window": {
     "navigationBarTitleText": "StudyPlan",

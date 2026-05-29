@@ -23,5 +23,9 @@ Page({
 
   goToFamily() {
     wx.navigateTo({ url: '/pages/family/index' });
+  },
+
+  goToRewardSettings() {
+    wx.navigateTo({ url: '/pages/reward-settings/index' });
   }
 });
