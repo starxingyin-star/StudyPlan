@@ -1,4 +1,5 @@
 const { callApi } = require('../../utils/api');
+const { enableShareMenu, getShareAppMessage } = require('../../utils/share');
 
 Page({
   data: {
@@ -15,6 +16,7 @@ Page({
   },
 
   async onShow() {
+    enableShareMenu();
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 });
     }
@@ -44,6 +46,10 @@ Page({
         rewardCount: rewardPresets.length
       }
     });
+  },
+
+  onShareAppMessage() {
+    return getShareAppMessage();
   },
 
   onFamilyNameDraftInput(event) {

@@ -2,6 +2,7 @@ const { callApi } = require('../../utils/api');
 const { getCurrentChildId, setCurrentChildId } = require('../../utils/store');
 const { requirePin } = require('../../utils/pin');
 const { buildDayTabs, getWeekStartDate } = require('../../utils/date');
+const { enableShareMenu, getShareAppMessage } = require('../../utils/share');
 
 Page({
   data: {
@@ -21,6 +22,7 @@ Page({
   },
 
   async onShow() {
+    enableShareMenu();
     const bootstrap = await callApi('bootstrapFamily');
     if (bootstrap.needsFamilySetup) {
       wx.switchTab({ url: '/pages/mine/index' });
@@ -50,6 +52,10 @@ Page({
       planDays: result.days || {},
       tasks: (result.days && result.days[(this.data.activeDay || dayTabs[0].date)]) || []
     });
+  },
+
+  onShareAppMessage() {
+    return getShareAppMessage();
   },
 
   async onTapSavePlan() {

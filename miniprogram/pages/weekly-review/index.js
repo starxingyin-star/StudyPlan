@@ -1,5 +1,6 @@
 const { callApi } = require('../../utils/api');
 const { getCurrentChildId, setCurrentChildId } = require('../../utils/store');
+const { enableShareMenu, getShareAppMessage } = require('../../utils/share');
 
 Page({
   data: {
@@ -10,6 +11,7 @@ Page({
   },
 
   async onShow() {
+    enableShareMenu();
     const bootstrap = await callApi('bootstrapFamily');
     if (bootstrap.needsFamilySetup) {
       wx.switchTab({ url: '/pages/mine/index' });
@@ -31,6 +33,10 @@ Page({
       summary: result.summary,
       pk: result.pk
     });
+  },
+
+  onShareAppMessage() {
+    return getShareAppMessage();
   },
 
   onChildChange(event) {

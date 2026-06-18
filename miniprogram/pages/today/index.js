@@ -1,5 +1,6 @@
 const { callApi } = require('../../utils/api');
 const { getCurrentChildId, setCurrentChildId } = require('../../utils/store');
+const { enableShareMenu, getShareAppMessage } = require('../../utils/share');
 
 Page({
   data: {
@@ -22,10 +23,15 @@ Page({
   },
 
   onShow() {
+    enableShareMenu();
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
     }
     this.loadPage();
+  },
+
+  onShareAppMessage() {
+    return getShareAppMessage();
   },
 
   async loadPage() {
