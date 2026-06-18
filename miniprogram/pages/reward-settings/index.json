@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "pin-sheet": "/components/pin-sheet/index"
+  },
+  "navigationBarTitleText": "奖励规则"
+}

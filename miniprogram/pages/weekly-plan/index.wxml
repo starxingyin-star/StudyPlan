@@ -1,0 +1,47 @@
+<view class="page">
+  <child-switcher children="{{children}}" currentChildId="{{currentChildId}}" bind:change="onChildChange" />
+
+  <view class="hint">当前周从 {{weekStartDate}} 开始，先选一天，再点任务库添加。</view>
+
+  <view class="tabs">
+    <block wx:for="{{dayTabs}}" wx:key="date">
+      <view class="tab {{item.date === activeDay ? 'active' : ''}}" data-date="{{item.date}}" bindtap="onTapDay">{{item.label}}</view>
+    </block>
+  </view>
+
+  <view class="section-title">任务库</view>
+  <view class="library">
+    <block wx:for="{{taskLibrary}}" wx:key="title">
+      <view class="library-item" data-title="{{item.title}}" bindtap="onAddTaskFromLibrary">
+        {{item.title}} +{{item.points}}
+      </view>
+    </block>
+  </view>
+
+  <view class="section-title">新增自定义任务</view>
+  <view class="custom-card">
+    <input class="custom-input" placeholder="任务名，例如 背古诗" value="{{customTitle}}" bindinput="onCustomTitleInput" />
+    <view class="custom-row">
+      <input class="custom-input small" type="number" placeholder="分钟" value="{{customDuration}}" bindinput="onCustomDurationInput" />
+      <input class="custom-input small" type="number" placeholder="积分" value="{{customPoints}}" bindinput="onCustomPointsInput" />
+    </view>
+    <button bindtap="onAddCustomTask">加入当前天</button>
+  </view>
+
+  <view class="section-title">当天任务</view>
+  <block wx:for="{{tasks}}" wx:key="index">
+    <view class="card">
+      <view class="card-main">
+        <view class="task-summary">{{item.title}} · {{item.durationMin}} 分钟 · +{{item.points}} 分</view>
+        <view class="remove-slot">
+          <view class="remove-btn" role="button" data-index="{{index}}" bindtap="onRemoveTask">删除</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{!tasks.length}}" class="empty">这一天还没有任务，先从任务库点一个加进来。</view>
+
+  <button bindtap="onTapSavePlan">保存当前周计划</button>
+  <pin-sheet visible="{{pinVisible}}" title="{{pinActionName}}" bind:confirm="onPinConfirm" bind:cancel="onPinCancel" />
+</view>

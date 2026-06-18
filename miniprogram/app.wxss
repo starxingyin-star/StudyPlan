@@ -1,0 +1,19 @@
+page {
+  background: #fbf7f2;
+  color: #5b5f6d;
+  font-family: sans-serif;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 140rpx);
+  box-sizing: border-box;
+}
+
+button {
+  border: none;
+  border-radius: 20rpx;
+  background: #9bcfbe;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+button::after {
+  border: none;
+}

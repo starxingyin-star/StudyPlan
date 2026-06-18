@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "child-switcher": "/components/child-switcher/index",
+    "pin-sheet": "/components/pin-sheet/index"
+  },
+  "navigationBarTitleText": "本周计划"
+}

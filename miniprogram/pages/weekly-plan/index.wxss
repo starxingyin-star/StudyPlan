@@ -1,0 +1,118 @@
+.page {
+  padding: 24rpx;
+}
+
+.hint {
+  margin-bottom: 16rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
+.tabs {
+  display: flex;
+  gap: 8rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 20rpx;
+  padding: 16rpx 0;
+}
+
+.tab.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  margin: 24rpx 0 16rpx;
+  font-weight: 700;
+}
+
+.library {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.library-item {
+  padding: 16rpx 20rpx;
+  border-radius: 999rpx;
+  background: #eefbf3;
+  color: #166534;
+  font-size: 24rpx;
+}
+
+.custom-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.custom-row {
+  display: flex;
+  gap: 16rpx;
+  margin: 16rpx 0;
+}
+
+.custom-input {
+  width: 100%;
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 16rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  box-sizing: border-box;
+  font-size: 28rpx;
+}
+
+.custom-input.small {
+  flex: 1;
+}
+
+.card-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.task-summary {
+  flex: 1;
+  min-width: 0;
+}
+
+.remove-slot {
+  width: 104rpx;
+  flex: 0 0 104rpx;
+}
+
+.remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104rpx;
+  height: 48rpx;
+  margin: 0;
+  border-radius: 14rpx;
+  font-size: 22rpx;
+}
+
+.empty {
+  color: #6b7280;
+  font-size: 24rpx;
+  padding: 24rpx 0;
+}

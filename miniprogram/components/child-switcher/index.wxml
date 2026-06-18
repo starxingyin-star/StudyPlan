@@ -1,0 +1,11 @@
+<view class="switcher">
+  <block wx:for="{{children}}" wx:key="memberId">
+    <view
+      class="pill {{item.memberId === currentChildId ? 'active' : ''}}"
+      data-child-id="{{item.memberId}}"
+      bindtap="onTapChild"
+    >
+      {{item.displayName}}
+    </view>
+  </block>
+</view>

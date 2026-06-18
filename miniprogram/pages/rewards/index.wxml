@@ -1,0 +1,71 @@
+<view class="page">
+  <child-switcher children="{{children}}" currentChildId="{{currentChildId}}" bind:change="onChildChange" />
+
+  <view class="hero">
+    <view class="hero-eyebrow">{{familyName}}</view>
+    <view class="hero-title">{{currentChildName || '当前孩子'}}的奖励账户</view>
+    <view class="hero-score">{{balance}}</view>
+    <view class="hero-desc">
+      {{redeemableCount ? '现在可以直接兑换 ' + redeemableCount + ' 个奖励' : (nextRewardTitle ? '再努力一点，就能兑换「' + nextRewardTitle + '」' : '继续完成任务，积累第一笔积分')}}
+    </view>
+  </view>
+
+  <view class="section-title">可兑换奖励</view>
+
+  <block wx:for="{{rewards}}" wx:key="rewardRuleId">
+    <view class="reward-card">
+      <view class="reward-top">
+        <view>
+          <view class="task-title">{{item.title}}</view>
+          <view class="reward-meta">需要 {{item.thresholdValue}} 分</view>
+        </view>
+        <view class="reward-badge {{balance >= item.thresholdValue ? 'active' : ''}}">
+          {{balance >= item.thresholdValue ? '可兑换' : '未达成'}}
+        </view>
+      </view>
+      <view class="reward-actions">
+        <view class="redeem-btn" role="button" data-reward-rule-id="{{item.rewardRuleId}}" data-title="{{item.title}}" data-threshold="{{item.thresholdValue}}" bindtap="onTapRedeem">兑换</view>
+      </view>
+    </view>
+  </block>
+
+  <view class="card" wx:if="{{recentRedemptions.length}}">
+    <view class="task-title">最近兑换</view>
+    <block wx:for="{{recentRedemptions}}" wx:key="requestedAt">
+      <view class="history-item">
+        <view>{{item.rewardTitle || item.rewardRuleId}}</view>
+        <view class="history-sub">扣除 {{item.pointsSpent}} 分 · {{item.status}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="pk-panel" wx:if="{{pk}}">
+    <view class="pk-header">
+      <view>
+        <view class="pk-eyebrow">家庭 PK</view>
+        <view class="pk-title">本周榜单</view>
+      </view>
+      <view class="pk-week">本周</view>
+    </view>
+
+    <view class="pk-grid">
+      <view class="pk-prize points">
+        <view class="pk-medal">分</view>
+        <view class="pk-label">积分领先</view>
+        <view class="pk-name">{{pk.pointsLeader.childName}}</view>
+      </view>
+      <view class="pk-prize completion">
+        <view class="pk-medal">完</view>
+        <view class="pk-label">完成率最佳</view>
+        <view class="pk-name">{{pk.completionLeader.childName}}</view>
+      </view>
+      <view class="pk-prize streak">
+        <view class="pk-medal">坚</view>
+        <view class="pk-label">坚持之星</view>
+        <view class="pk-name">{{pk.streakLeader.childName}}</view>
+      </view>
+    </view>
+
+    <view class="pk-caption">只和家里成员比较，鼓励多一点，排名轻一点。</view>
+  </view>
+</view>

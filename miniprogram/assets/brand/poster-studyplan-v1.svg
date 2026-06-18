@@ -1,0 +1,88 @@
+<svg width="1200" height="1600" viewBox="0 0 1200 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="160" y1="120" x2="1040" y2="1480" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A8EBC6"/>
+      <stop offset="0.5" stop-color="#6ED8B8"/>
+      <stop offset="1" stop-color="#46B8A1"/>
+    </linearGradient>
+    <linearGradient id="bookCover" x1="286" y1="792" x2="914" y2="1090" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#37B888"/>
+      <stop offset="1" stop-color="#18735A"/>
+    </linearGradient>
+    <linearGradient id="bookPage" x1="350" y1="680" x2="870" y2="1050" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFDF4"/>
+      <stop offset="1" stop-color="#FFF2D2"/>
+    </linearGradient>
+    <linearGradient id="clockOuter" x1="430" y1="420" x2="760" y2="860" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B8F279"/>
+      <stop offset="0.42" stop-color="#56D483"/>
+      <stop offset="1" stop-color="#0CA170"/>
+    </linearGradient>
+    <linearGradient id="clockFace" x1="494" y1="516" x2="714" y2="816" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFDF7"/>
+      <stop offset="1" stop-color="#FFF7E7"/>
+    </linearGradient>
+    <filter id="softShadow" x="160" y="320" width="880" height="860" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="28"/>
+      <feGaussianBlur stdDeviation="36"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0509 0 0 0 0 0.3529 0 0 0 0 0.2627 0 0 0 0.18 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="1600" rx="180" fill="url(#bg)"/>
+
+  <g filter="url(#softShadow)">
+    <path d="M278 898C278 853.265 314.265 817 359 817H556C619.658 817 669.771 835.633 706 873V1116H399C330.517 1116 278 1064.48 278 996V898Z" fill="url(#bookCover)"/>
+    <path d="M922 898C922 853.265 885.735 817 841 817H644C580.342 817 530.229 835.633 494 873V1116H801C869.483 1116 922 1064.48 922 996V898Z" fill="url(#bookCover)"/>
+
+    <path d="M314 846C314 811.758 341.758 784 376 784H560C622.612 784 673.213 803.26 710 841.78V1077H406C355.189 1077 314 1035.81 314 985V846Z" fill="url(#bookPage)"/>
+    <path d="M886 846C886 811.758 858.242 784 824 784H640C577.388 784 526.787 803.26 490 841.78V1077H794C844.811 1077 886 1035.81 886 985V846Z" fill="url(#bookPage)"/>
+
+    <path d="M380 862C437 855 495 855 560 871" stroke="#D7EDC6" stroke-width="12" stroke-linecap="round"/>
+    <path d="M366 934C430 924 491 925 556 941" stroke="#D7EDC6" stroke-width="12" stroke-linecap="round"/>
+    <path d="M358 1004C422 993 481 995 547 1012" stroke="#D7EDC6" stroke-width="12" stroke-linecap="round"/>
+    <path d="M820 862C763 855 705 855 640 871" stroke="#D7EDC6" stroke-width="12" stroke-linecap="round"/>
+    <path d="M834 934C770 924 709 925 644 941" stroke="#D7EDC6" stroke-width="12" stroke-linecap="round"/>
+    <path d="M842 1004C778 993 719 995 653 1012" stroke="#D7EDC6" stroke-width="12" stroke-linecap="round"/>
+
+    <path d="M474 842C510 812 553 799 600 799C647 799 690 812 726 842" stroke="#FFF6E6" stroke-width="18" stroke-linecap="round"/>
+
+    <ellipse cx="600" cy="728" rx="204" ry="214" fill="url(#clockOuter)"/>
+    <ellipse cx="600" cy="728" rx="164" ry="172" fill="url(#clockFace)"/>
+
+    <rect x="566" y="394" width="68" height="62" rx="21" fill="#FFF7EC"/>
+    <path d="M433 499C408 468 395 438 394 407C421 398 453 406 487 435C474 454 458 476 433 499Z" fill="#75DC89"/>
+    <path d="M767 499C792 468 805 438 806 407C779 398 747 406 713 435C726 454 742 476 767 499Z" fill="#75DC89"/>
+    <path d="M414 419C438 391 468 387 496 403C483 434 463 456 432 479L414 419Z" fill="#18A16E"/>
+    <path d="M786 419C762 391 732 387 704 403C717 434 737 456 768 479L786 419Z" fill="#18A16E"/>
+
+    <circle cx="537" cy="719" r="21" fill="#4B2F1D"/>
+    <circle cx="663" cy="719" r="21" fill="#4B2F1D"/>
+    <circle cx="530" cy="712" r="6" fill="white"/>
+    <circle cx="656" cy="712" r="6" fill="white"/>
+    <ellipse cx="496" cy="772" rx="29" ry="20" fill="#FFC4A8"/>
+    <ellipse cx="704" cy="772" rx="29" ry="20" fill="#FFC4A8"/>
+
+    <circle cx="600" cy="729" r="26" fill="#10A46F"/>
+    <path d="M600 632V729" stroke="#10A46F" stroke-width="20" stroke-linecap="round"/>
+    <path d="M600 729L552 778" stroke="#F6A22F" stroke-width="20" stroke-linecap="round"/>
+
+    <path d="M600 588V565" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M600 890V867" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M451 729H474" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M726 729H749" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M496 626L510 640" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M690 820L704 834" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M496 834L510 820" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M690 640L704 626" stroke="#10A46F" stroke-width="11" stroke-linecap="round"/>
+  </g>
+
+  <g>
+    <text x="600" y="1360" text-anchor="middle" font-size="132" font-weight="800" fill="#FFFFFF" style="font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif; letter-spacing: 8px;">乐学日程</text>
+    <text x="600" y="1452" text-anchor="middle" font-size="42" font-weight="600" fill="rgba(255,255,255,0.88)" style="font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif; letter-spacing: 3px;">让每天的学习 更有计划</text>
+  </g>
+</svg>

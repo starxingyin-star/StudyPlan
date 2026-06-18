@@ -1,0 +1,73 @@
+<view class="page">
+  <child-switcher children="{{children}}" currentChildId="{{currentChildId}}" bind:change="onChildChange" />
+
+  <view class="hero-card">
+    <view class="hero-top">
+      <view>
+        <view class="hero-eyebrow">{{familyName}}</view>
+        <view class="hero-title">{{currentChildName || '当前孩子'}}的今天</view>
+      </view>
+      <view class="hero-progress">{{completionPercent}}%</view>
+    </view>
+    <view class="hero-desc">{{encouragement}}</view>
+    <view class="hero-stats">
+      <view class="stat-box">
+        <view class="stat-value">{{summary.totalTasks || 0}}</view>
+        <view class="stat-label">今日任务</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-value">{{remainingTasks}}</view>
+        <view class="stat-label">剩余任务</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-value">{{summary.streakDays || 0}}</view>
+        <view class="stat-label">连续天数</view>
+      </view>
+      <view class="stat-box">
+        <view class="stat-value">{{summary.totalPoints || 0}}</view>
+        <view class="stat-label">当前积分</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-title">今日任务清单</view>
+
+  <block wx:for="{{tasks}}" wx:key="dailyTaskId">
+    <view class="task-card">
+      <view class="task-head">
+        <view>
+          <view class="task-title">{{item.title}}</view>
+          <view class="task-meta">{{item.durationMin}} 分钟 · +{{item.points}} 分</view>
+        </view>
+        <view class="status {{item.currentResult || 'pending'}}">
+          {{item.isPausedDay ? '已暂停' : (item.currentResult === 'completed' ? '已完成' : item.currentResult === 'partial' ? '部分完成' : item.currentResult === 'missed' ? '未完成' : '待记录')}}
+        </view>
+      </view>
+      <view wx:if="{{item.currentComment}}" class="comment">备注：{{item.currentComment}}</view>
+      <view class="task-actions">
+        <view wx:if="{{item.currentResult !== 'completed'}}" class="action-btn" role="button" data-task-id="{{item.dailyTaskId}}" bindtap="onToggleTask">记录</view>
+      </view>
+
+      <view wx:if="{{item.currentResult !== 'completed' && expandedTaskId === item.dailyTaskId}}" class="task-panel">
+        <input
+          class="note-input"
+          placeholder="备注，例如 今天读得很认真"
+          data-task-id="{{item.dailyTaskId}}"
+          value="{{noteDrafts[item.dailyTaskId]}}"
+          bindinput="onNoteInput"
+        />
+        <view class="action-grid">
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="completed" bindtap="onRecordTask">完成</button>
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="partial" bindtap="onRecordTask">部分完成</button>
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="missed" bindtap="onRecordTask">未完成</button>
+          <button class="small-action" data-task-id="{{item.dailyTaskId}}" data-result="missed" data-paused="true" bindtap="onRecordTask">暂停当天</button>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{!tasks.length}}" class="empty-card">
+    <view class="empty-title">今天还没有任务</view>
+    <view class="empty-desc">去“我的 > 本周计划”给 {{currentChildName || '孩子'}} 安排一下今天的练习内容。</view>
+  </view>
+</view>
