@@ -1,22 +1,36 @@
-const { collections, DEFAULT_FAMILY_ID, ensureDefaultSeed } = require('../common/db');
+const { collections, ensureFamilySeed } = require('../common/db');
+const { resolveFamilyAuth } = require('../common/family-service');
+const { resolveChildId } = require('../common/member-service');
 
-async function getToday({ payload }) {
-  await ensureDefaultSeed(collections);
+async function getToday({ payload, authContext, collections: injectedCollections }) {
+  const activeCollections = injectedCollections || collections;
+  const auth = await resolveFamilyAuth({
+    collections: activeCollections,
+    openid: authContext && authContext.openid
+  });
+  await ensureFamilySeed(activeCollections, auth.familyId, {
+    familyName: auth.family.familyName,
+    parentPin: auth.family.parentPin
+  });
 
-  const childId = payload.childId || 'child-younger';
+  const childId = await resolveChildId({
+    collections: activeCollections,
+    familyId: auth.familyId,
+    requestedChildId: payload.childId
+  });
   const today = new Date().toISOString().slice(0, 10);
-  const tasksResult = await collections.dailyTasks.where({
-    familyId: DEFAULT_FAMILY_ID,
+  const tasksResult = await activeCollections.dailyTasks.where({
+    familyId: auth.familyId,
     childId,
     taskDate: today
   }).get();
-  const recordsResult = await collections.taskRecords.where({
-    familyId: DEFAULT_FAMILY_ID,
+  const recordsResult = await activeCollections.taskRecords.where({
+    familyId: auth.familyId,
     childId,
     taskDate: today
   }).get();
-  const ledgersResult = await collections.pointLedgers.where({
-    familyId: DEFAULT_FAMILY_ID,
+  const ledgersResult = await activeCollections.pointLedgers.where({
+    familyId: auth.familyId,
     childId
   }).get();
 

@@ -14,19 +14,50 @@
     </view>
   </view>
 
-  <view class="entry-card" bindtap="goToWeeklyPlan">
+  <view wx:if="{{needsFamilySetup}}" class="setup-card">
+    <view class="entry-title">创建家庭</view>
+    <view class="entry-desc">用当前微信创建自己的家庭空间，之后可以邀请家人加入。</view>
+    <input class="setup-input" placeholder="家庭名称" value="{{familyNameDraft}}" bindinput="onFamilyNameDraftInput" />
+    <input class="setup-input" password placeholder="家长密码，例如 2468" value="{{parentPinDraft}}" bindinput="onParentPinDraftInput" />
+    <view class="setup-actions">
+      <view class="primary-action" role="button" bindtap="onCreateFamily">创建家庭</view>
+    </view>
+  </view>
+
+  <view wx:if="{{needsFamilySetup}}" class="setup-card">
+    <view class="entry-title">加入家庭</view>
+    <view class="entry-desc">输入家人分享给你的邀请码，加入同一个家庭空间。</view>
+    <input class="setup-input" placeholder="6 位邀请码" maxlength="6" value="{{inviteTokenDraft}}" bindinput="onInviteTokenDraftInput" />
+    <view class="setup-actions">
+      <view class="secondary-action" role="button" bindtap="onJoinFamily">加入家庭</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!needsFamilySetup}}" class="entry-card invite-card">
+    <view>
+      <view class="entry-title">邀请家人</view>
+      <view class="entry-desc">生成邀请码，让家人用自己的微信加入这个家庭。</view>
+      <view wx:if="{{generatedInviteToken}}" class="invite-token-row">
+        <view class="invite-token" role="button" bindtap="onCopyInviteToken">{{generatedInviteToken}}</view>
+        <view class="copy-action" role="button" bindtap="onCopyInviteToken">复制</view>
+      </view>
+    </view>
+    <view class="small-action" role="button" bindtap="onCreateInvite">生成</view>
+  </view>
+
+  <view wx:if="{{!needsFamilySetup}}" class="entry-card" bindtap="goToWeeklyPlan">
     <view class="entry-title">本周计划</view>
     <view class="entry-desc">按孩子、按天安排任务，支持任务库和自定义任务。</view>
   </view>
-  <view class="entry-card" bindtap="goToWeeklyReview">
+  <view wx:if="{{!needsFamilySetup}}" class="entry-card" bindtap="goToWeeklyReview">
     <view class="entry-title">周回顾</view>
     <view class="entry-desc">查看积分、完成率、坚持情况和家庭内 PK。</view>
   </view>
-  <view class="entry-card" bindtap="goToFamily">
+  <view wx:if="{{!needsFamilySetup}}" class="entry-card" bindtap="goToFamily">
     <view class="entry-title">家庭成员</view>
     <view class="entry-desc">管理家庭名称、孩子和照看者。</view>
   </view>
-  <view class="entry-card" bindtap="goToRewardSettings">
+  <view wx:if="{{!needsFamilySetup}}" class="entry-card" bindtap="goToRewardSettings">
     <view class="entry-title">奖励规则</view>
     <view class="entry-desc">管理积分兑换项和奖励分值。</view>
   </view>

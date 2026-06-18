@@ -41,4 +41,28 @@ describe('weekly plan templates', () => {
     expect(draft.days['2026-05-25'][0].sortOrder).toBe(1);
     expect(draft.days['2026-05-25'][1].sourceType).toBe('manual');
   });
+
+  test('keeps custom tasks added to the current day alongside template tasks', () => {
+    const draft = buildWeeklyPlanDraft({
+      childId: 'child-younger',
+      weekStartDate: '2026-06-15',
+      templateId: 'lower-grade-habits',
+      focusHabits: ['练字', '朗读'],
+      tasksByDay: {
+        '2026-06-17': [
+          { title: '练字', taskType: 'study', durationMin: 15, points: 2, isRequired: true },
+          { title: '朗读', taskType: 'study', durationMin: 10, points: 1, isRequired: true },
+          { title: '背古诗', taskType: 'custom', durationMin: 10, points: 1, isRequired: true }
+        ]
+      }
+    });
+
+    expect(draft.days['2026-06-17'].map((task) => task.title)).toEqual(['练字', '朗读', '背古诗']);
+    expect(draft.days['2026-06-17']).toHaveLength(3);
+    expect(draft.days['2026-06-17'][2]).toMatchObject({
+      taskDate: '2026-06-17',
+      sortOrder: 3,
+      sourceType: 'manual'
+    });
+  });
 });

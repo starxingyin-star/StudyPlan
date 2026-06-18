@@ -5,7 +5,10 @@ function callApi(action, payload = {}) {
       action,
       payload
     }
-  }).then((response) => response.result);
+  }).then((response) => response.result).catch((error) => {
+    const message = error && (error.errMsg || error.message);
+    throw new Error(message || '请求失败');
+  });
 }
 
 module.exports = {

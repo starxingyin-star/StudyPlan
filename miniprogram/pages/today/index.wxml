@@ -44,9 +44,11 @@
         </view>
       </view>
       <view wx:if="{{item.currentComment}}" class="comment">备注：{{item.currentComment}}</view>
-      <button class="action-btn" data-task-id="{{item.dailyTaskId}}" bindtap="onToggleTask">记录状态</button>
+      <view class="task-actions">
+        <view wx:if="{{item.currentResult !== 'completed'}}" class="action-btn" role="button" data-task-id="{{item.dailyTaskId}}" bindtap="onToggleTask">记录</view>
+      </view>
 
-      <view wx:if="{{expandedTaskId === item.dailyTaskId}}" class="task-panel">
+      <view wx:if="{{item.currentResult !== 'completed' && expandedTaskId === item.dailyTaskId}}" class="task-panel">
         <input
           class="note-input"
           placeholder="备注，例如 今天读得很认真"

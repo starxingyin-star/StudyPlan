@@ -70,10 +70,13 @@
 
 .custom-input {
   width: 100%;
-  padding: 16rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 16rpx;
   border-radius: 16rpx;
   background: #f3f4f6;
   box-sizing: border-box;
+  font-size: 28rpx;
 }
 
 .custom-input.small {
@@ -87,9 +90,25 @@
   gap: 16rpx;
 }
 
+.task-summary {
+  flex: 1;
+  min-width: 0;
+}
+
+.remove-slot {
+  width: 104rpx;
+  flex: 0 0 104rpx;
+}
+
 .remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104rpx;
+  height: 48rpx;
   margin: 0;
-  font-size: 24rpx;
+  border-radius: 14rpx;
+  font-size: 22rpx;
 }
 
 .empty {

@@ -9,11 +9,13 @@
   text-align: center;
   padding: 16rpx 0;
   border-radius: 24rpx;
-  background: #f3f4f6;
-  color: #6b7280;
+  background: #f5efe7;
+  color: #6f7384;
+  font-weight: 700;
 }
 
 .pill.active {
-  background: #111827;
-  color: #ffffff;
+  background: linear-gradient(160deg, #f7d5de, #f1c6d3);
+  color: #5f4657;
+  box-shadow: 0 8rpx 18rpx rgba(241, 198, 211, 0.28);
 }

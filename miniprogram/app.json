@@ -11,6 +11,8 @@
   "window": {
     "navigationBarTitleText": "StudyPlan",
     "navigationBarBackgroundColor": "#f8f7f1",
+    "navigationBarTextStyle": "black",
+    "backgroundTextStyle": "dark",
     "backgroundColor": "#f8f7f1"
   },
   "tabBar": {

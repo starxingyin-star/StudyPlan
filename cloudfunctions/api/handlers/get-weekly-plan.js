@@ -1,26 +1,40 @@
 const {
+  buildScopedId,
   collections,
-  DEFAULT_FAMILY_ID,
   DEFAULT_MEMBERS,
-  ensureDefaultSeed,
+  ensureFamilySeed,
   getWeekStartDate
 } = require('../common/db');
+const { resolveFamilyAuth } = require('../common/family-service');
+const { resolveChildId } = require('../common/member-service');
 const { buildWeeklyPlanDraft } = require('../common/plan-service');
 
-async function getWeeklyPlan({ payload }) {
-  await ensureDefaultSeed(collections);
+async function getWeeklyPlan({ payload, authContext }) {
+  const auth = await resolveFamilyAuth({
+    collections,
+    openid: authContext && authContext.openid
+  });
+  await ensureFamilySeed(collections, auth.familyId, {
+    familyName: auth.family.familyName,
+    parentPin: auth.family.parentPin
+  });
 
-  const childId = payload.childId || 'child-younger';
+  const childId = await resolveChildId({
+    collections,
+    familyId: auth.familyId,
+    requestedChildId: payload.childId
+  });
   const weekStartDate = payload.weekStartDate || getWeekStartDate();
-  const weeklyPlanId = `${childId}_${weekStartDate}`;
+  const weeklyPlanId = buildScopedId(auth.familyId, `${childId}_${weekStartDate}`);
   let dailyTasksResult = await collections.dailyTasks.where({
-    familyId: DEFAULT_FAMILY_ID,
+    familyId: auth.familyId,
     weeklyPlanId
   }).get();
 
   if (!dailyTasksResult.data.length) {
-    const member = DEFAULT_MEMBERS.find((item) => item.memberId === childId) || DEFAULT_MEMBERS[1];
-    const templateId = childId === 'child-older' ? 'older-study-mix' : 'lower-grade-habits';
+    const membersResult = await collections.members.where({ familyId: auth.familyId, memberId: childId }).get();
+    const member = membersResult.data[0] || DEFAULT_MEMBERS[1];
+    const templateId = (member.focusHabits || []).includes('口算') ? 'older-study-mix' : 'lower-grade-habits';
     const draft = buildWeeklyPlanDraft({
       childId,
       weekStartDate,
@@ -30,13 +44,13 @@ async function getWeeklyPlan({ payload }) {
 
     for (const [date, tasks] of Object.entries(draft.days)) {
       for (const task of tasks) {
-        const taskId = `${weeklyPlanId}_${date}_${task.sortOrder}`;
+        const taskId = buildScopedId(auth.familyId, `${weeklyPlanId}_${date}_${task.sortOrder}`);
         await collections.dailyTasks.doc(taskId).set({
           data: {
             ...task,
             dailyTaskId: taskId,
             weeklyPlanId,
-            familyId: DEFAULT_FAMILY_ID,
+            familyId: auth.familyId,
             childId,
             taskDate: date
           }
@@ -45,7 +59,7 @@ async function getWeeklyPlan({ payload }) {
     }
 
     dailyTasksResult = await collections.dailyTasks.where({
-      familyId: DEFAULT_FAMILY_ID,
+      familyId: auth.familyId,
       weeklyPlanId
     }).get();
   }

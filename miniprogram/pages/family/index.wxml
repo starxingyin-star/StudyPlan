@@ -6,27 +6,27 @@
 
   <view class="section-title">家庭成员</view>
   <block wx:for="{{members}}" wx:key="memberId">
-    <view class="card">
-      <view class="row">
-        <view>
-          <view class="strong">{{item.displayName}}</view>
-          <view class="sub">{{item.relationType}}{{item.grade ? ' · ' + item.grade : ''}}</view>
-        </view>
-        <button class="small-btn" data-member-id="{{item.memberId}}" bindtap="onRemoveMember">删除</button>
+    <view class="member-card">
+      <view class="member-main">
+        <view class="strong">{{item.displayName}}</view>
+        <view class="sub">{{item.relationType}}{{item.grade ? ' · ' + item.grade : ''}}</view>
+      </view>
+      <view class="member-actions">
+        <view class="mini-danger" role="button" data-member-id="{{item.memberId}}" bindtap="onRemoveMember">删除</view>
       </view>
     </view>
   </block>
 
-  <view class="card">
+  <view class="form-card">
     <view class="strong">新增成员</view>
     <input class="text-input" placeholder="姓名，例如 哥哥 / 爷爷" value="{{newMemberName}}" bindinput="onNewMemberNameInput" />
     <picker mode="selector" range="{{relationOptions}}" value="{{newMemberRelationIndex}}" bindchange="onNewMemberRelationChange">
       <view class="picker">关系：{{relationOptions[newMemberRelationIndex]}}</view>
     </picker>
     <input wx:if="{{relationOptions[newMemberRelationIndex] === 'child'}}" class="text-input" placeholder="年级，例如 二年级" value="{{newMemberGrade}}" bindinput="onNewMemberGradeInput" />
-    <button bindtap="onAddMember">加入家庭</button>
+    <button class="wide-btn" bindtap="onAddMember">加入家庭</button>
   </view>
 
-  <button bindtap="onTapSaveSettings">保存家庭设置</button>
+  <button class="page-submit" bindtap="onTapSaveSettings">保存家庭设置</button>
   <pin-sheet visible="{{pinVisible}}" title="{{pinActionName}}" bind:confirm="onPinConfirm" bind:cancel="onPinCancel" />
 </view>

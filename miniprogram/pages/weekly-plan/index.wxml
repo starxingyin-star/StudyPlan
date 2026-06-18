@@ -32,8 +32,10 @@
   <block wx:for="{{tasks}}" wx:key="index">
     <view class="card">
       <view class="card-main">
-        <view>{{item.title}} · {{item.durationMin}} 分钟 · +{{item.points}} 分</view>
-        <button class="remove-btn" data-index="{{index}}" bindtap="onRemoveTask">删除</button>
+        <view class="task-summary">{{item.title}} · {{item.durationMin}} 分钟 · +{{item.points}} 分</view>
+        <view class="remove-slot">
+          <view class="remove-btn" role="button" data-index="{{index}}" bindtap="onRemoveTask">删除</view>
+        </view>
       </view>
     </view>
   </block>

@@ -1,30 +1,44 @@
-const { collections, DEFAULT_FAMILY_ID, ensureDefaultSeed, getWeekStartDate } = require('../common/db');
+const { buildScopedId, collections, ensureFamilySeed, getWeekStartDate } = require('../common/db');
+const { resolveFamilyAuth } = require('../common/family-service');
+const { resolveChildId } = require('../common/member-service');
 const { buildFamilyPk } = require('../common/summary-service');
 
-async function getRewards({ payload }) {
-  await ensureDefaultSeed(collections);
+async function getRewards({ payload, authContext }) {
+  const auth = await resolveFamilyAuth({
+    collections,
+    openid: authContext && authContext.openid
+  });
+  await ensureFamilySeed(collections, auth.familyId, {
+    familyName: auth.family.familyName,
+    parentPin: auth.family.parentPin
+  });
 
-  const childId = payload.childId || 'child-younger';
-  const rewardsResult = await collections.rewardRules.where({ familyId: DEFAULT_FAMILY_ID }).get();
-  const ledgersResult = await collections.pointLedgers.where({ familyId: DEFAULT_FAMILY_ID, childId }).get();
-  const redemptionsResult = await collections.rewardRedemptions.where({ familyId: DEFAULT_FAMILY_ID, childId }).get();
+  const childId = await resolveChildId({
+    collections,
+    familyId: auth.familyId,
+    requestedChildId: payload.childId
+  });
+  const rewardsResult = await collections.rewardRules.where({ familyId: auth.familyId }).get();
+  const ledgersResult = await collections.pointLedgers.where({ familyId: auth.familyId, childId }).get();
+  const redemptionsResult = await collections.rewardRedemptions.where({ familyId: auth.familyId, childId }).get();
   const balance = ledgersResult.data.reduce((sum, item) => sum + item.deltaPoints, 0);
-  const membersResult = await collections.members.where({ familyId: DEFAULT_FAMILY_ID, isChild: true }).get();
+  const membersResult = await collections.members.where({ familyId: auth.familyId, isChild: true }).get();
   const weekStartDate = getWeekStartDate();
   const pkSource = [];
 
   for (const member of membersResult.data) {
+    const weeklyPlanId = buildScopedId(auth.familyId, `${member.memberId}_${weekStartDate}`);
     const tasks = await collections.dailyTasks.where({
-      familyId: DEFAULT_FAMILY_ID,
+      familyId: auth.familyId,
       childId: member.memberId,
-      weeklyPlanId: `${member.memberId}_${weekStartDate}`
+      weeklyPlanId
     }).get();
     const records = await collections.taskRecords.where({
-      familyId: DEFAULT_FAMILY_ID,
+      familyId: auth.familyId,
       childId: member.memberId
     }).get();
     const memberLedgers = await collections.pointLedgers.where({
-      familyId: DEFAULT_FAMILY_ID,
+      familyId: auth.familyId,
       childId: member.memberId
     }).get();
 

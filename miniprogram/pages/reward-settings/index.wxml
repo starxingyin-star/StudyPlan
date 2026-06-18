@@ -1,23 +1,23 @@
 <view class="page">
   <view class="section-title">奖励规则</view>
   <block wx:for="{{rewards}}" wx:key="rewardRuleId">
-    <view class="card">
+    <view class="reward-card">
       <input class="text-input" data-index="{{index}}" value="{{item.title}}" bindinput="onRewardTitleInput" />
-      <view class="row">
+      <view class="reward-row">
         <input class="text-input small" type="number" data-index="{{index}}" value="{{item.thresholdValue}}" bindinput="onRewardThresholdInput" />
         <view class="sub">积分</view>
-        <button class="small-btn" data-reward-rule-id="{{item.rewardRuleId}}" bindtap="onRemoveReward">删除</button>
+        <view class="mini-danger" role="button" data-reward-rule-id="{{item.rewardRuleId}}" bindtap="onRemoveReward">删除</view>
       </view>
     </view>
   </block>
 
-  <view class="card">
+  <view class="form-card">
     <view class="strong">新增奖励</view>
     <input class="text-input" placeholder="奖励名称，例如 冰淇淋" value="{{newRewardTitle}}" bindinput="onNewRewardTitleInput" />
     <input class="text-input" type="number" placeholder="所需积分" value="{{newRewardThreshold}}" bindinput="onNewRewardThresholdInput" />
-    <button bindtap="onAddReward">加入奖励</button>
+    <button class="wide-btn" bindtap="onAddReward">加入奖励</button>
   </view>
 
-  <button bindtap="onTapSaveSettings">保存奖励规则</button>
+  <button class="page-submit" bindtap="onTapSaveSettings">保存奖励规则</button>
   <pin-sheet visible="{{pinVisible}}" title="{{pinActionName}}" bind:confirm="onPinConfirm" bind:cancel="onPinCancel" />
 </view>

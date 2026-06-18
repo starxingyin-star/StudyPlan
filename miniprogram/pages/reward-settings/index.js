@@ -14,6 +14,10 @@ Page({
 
   async onShow() {
     const bootstrap = await callApi('bootstrapFamily');
+    if (bootstrap.needsFamilySetup) {
+      wx.switchTab({ url: '/pages/mine/index' });
+      return;
+    }
     this.setData({
       familyName: bootstrap.family ? bootstrap.family.familyName : '',
       members: bootstrap.members || [],
@@ -24,6 +28,9 @@ Page({
   async onTapSaveSettings() {
     try {
       const pin = await requirePin(this, '保存奖励规则');
+      if (!pin) {
+        throw new Error('请输入家长密码');
+      }
       const result = await callApi('saveFamilySettings', {
         familyName: this.data.familyName,
         members: this.data.members,
@@ -43,7 +50,9 @@ Page({
         pinVisible: false,
         pinActionName: ''
       });
-      await this.onShow();
+      setTimeout(() => {
+        wx.navigateBack();
+      }, 350);
     } catch (error) {
       this.setData({
         pinVisible: false,

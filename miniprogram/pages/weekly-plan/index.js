@@ -1,31 +1,7 @@
 const { callApi } = require('../../utils/api');
 const { getCurrentChildId, setCurrentChildId } = require('../../utils/store');
 const { requirePin } = require('../../utils/pin');
-
-function formatIsoDate(date) {
-  return date.toISOString().slice(0, 10);
-}
-
-function getWeekStartDate(base = new Date()) {
-  const date = new Date(base);
-  const day = date.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
-  date.setDate(date.getDate() + diff);
-  return date;
-}
-
-function buildDayTabs(weekStartDate) {
-  const labels = ['一', '二', '三', '四', '五', '六', '日'];
-  const base = new Date(`${weekStartDate}T00:00:00`);
-  return labels.map((label, index) => {
-    const current = new Date(base);
-    current.setDate(base.getDate() + index);
-    return {
-      date: formatIsoDate(current),
-      label
-    };
-  });
-}
+const { buildDayTabs, getWeekStartDate } = require('../../utils/date');
 
 Page({
   data: {
@@ -46,16 +22,26 @@ Page({
 
   async onShow() {
     const bootstrap = await callApi('bootstrapFamily');
+    if (bootstrap.needsFamilySetup) {
+      wx.switchTab({ url: '/pages/mine/index' });
+      return;
+    }
     const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
-    const weekStartDate = formatIsoDate(getWeekStartDate());
+    const weekStartDate = getWeekStartDate();
     const dayTabs = buildDayTabs(weekStartDate);
-    const currentChildId = getCurrentChildId() || 'child-younger';
+    const storedChildId = getCurrentChildId();
+    const currentChildId = childMembers.some((member) => member.memberId === storedChildId)
+      ? storedChildId
+      : (childMembers[0] && childMembers[0].memberId);
+    if (currentChildId) {
+      setCurrentChildId(currentChildId);
+    }
     const result = await callApi('getWeeklyPlan', {
       childId: currentChildId,
       weekStartDate
     });
     this.setData({
-      currentChildId: currentChildId || (childMembers[0] && childMembers[0].memberId),
+      currentChildId,
       children: childMembers,
       weekStartDate,
       dayTabs,
@@ -69,6 +55,9 @@ Page({
   async onTapSavePlan() {
     try {
       const pin = await requirePin(this, '保存本周计划');
+      if (!pin) {
+        throw new Error('请输入家长密码');
+      }
       const result = await callApi('saveWeeklyPlan', {
         childId: this.data.currentChildId,
         weekStartDate: this.data.weekStartDate,
@@ -82,8 +71,22 @@ Page({
         planDays: result.days,
         tasks: result.days[this.data.activeDay] || []
       });
+      wx.showToast({
+        title: '已保存',
+        icon: 'success'
+      });
+      setTimeout(() => {
+        wx.navigateBack();
+      }, 350);
     } catch (error) {
-      this.setData({ pinVisible: false });
+      this.setData({
+        pinVisible: false,
+        pinActionName: ''
+      });
+      wx.showToast({
+        title: error && error.message ? error.message : '保存失败',
+        icon: 'none'
+      });
     }
   },
 

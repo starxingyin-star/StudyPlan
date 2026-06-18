@@ -1,7 +1,16 @@
 <view wx:if="{{visible}}" class="mask">
   <view class="sheet">
     <view class="title">{{title || '输入家长密码'}}</view>
-    <input password value="{{value}}" bindinput="onInput" />
+    <input
+      class="pin-input"
+      password
+      type="number"
+      maxlength="6"
+      placeholder="请输入家长密码"
+      value="{{value}}"
+      bindinput="onInput"
+      confirm-type="done"
+    />
     <view class="actions">
       <button bindtap="onCancel">取消</button>
       <button bindtap="onConfirm">确认</button>

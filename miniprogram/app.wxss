@@ -1,6 +1,6 @@
 page {
-  background: #f8f7f1;
-  color: #1f2937;
+  background: #fbf7f2;
+  color: #5b5f6d;
   font-family: sans-serif;
   padding-bottom: calc(env(safe-area-inset-bottom) + 140rpx);
   box-sizing: border-box;
@@ -9,7 +9,7 @@ page {
 button {
   border: none;
   border-radius: 20rpx;
-  background: #1fb87c;
+  background: #9bcfbe;
   color: #ffffff;
   font-weight: 700;
 }

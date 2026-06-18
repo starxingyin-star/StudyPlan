@@ -3,23 +3,25 @@
 }
 
 .hero {
-  background: linear-gradient(160deg, #1c4a8f, #275fd8);
-  color: #ffffff;
+  background: linear-gradient(160deg, #cadbf5, #b7ccef);
+  color: #4e5f77;
   border-radius: 32rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 18rpx 40rpx rgba(39, 95, 216, 0.22);
+  box-shadow: 0 18rpx 40rpx rgba(183, 204, 239, 0.30);
 }
 
 .hero-eyebrow {
   font-size: 22rpx;
-  opacity: 0.82;
+  color: #72839b;
+  opacity: 1;
 }
 
 .hero-title {
   margin-top: 8rpx;
   font-size: 40rpx;
   font-weight: 700;
+  color: #4f6178;
 }
 
 .hero-score {
@@ -27,20 +29,21 @@
   font-size: 72rpx;
   font-weight: 800;
   line-height: 1;
+  color: #4f6178;
 }
 
 .hero-desc {
   margin-top: 14rpx;
   font-size: 24rpx;
   line-height: 1.6;
-  opacity: 0.94;
+  color: #72839b;
 }
 
 .section-title {
   margin: 8rpx 0 16rpx;
   font-size: 28rpx;
   font-weight: 700;
-  color: #1f2937;
+  color: #6b6f7d;
 }
 
 .card,
@@ -50,6 +53,11 @@
   padding: 24rpx;
   margin-bottom: 20rpx;
   box-shadow: 0 10rpx 24rpx rgba(15, 23, 42, 0.05);
+}
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
 }
 
 .task-title {
@@ -66,21 +74,40 @@
 }
 
 .reward-meta {
-  color: #6b7280;
+  color: #7f7a91;
   font-size: 24rpx;
 }
 
 .reward-badge {
   padding: 8rpx 16rpx;
   border-radius: 999rpx;
-  background: #f3f4f6;
-  color: #6b7280;
+  background: #f5efe7;
+  color: #7f7a91;
   font-size: 22rpx;
 }
 
 .reward-badge.active {
-  background: #dcfce7;
-  color: #166534;
+  background: #ffeec7;
+  color: #ac8a55;
+}
+
+.reward-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14rpx;
+}
+
+.redeem-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 48rpx;
+  border-radius: 14rpx;
+  background: #9fd5c7;
+  color: #ffffff;
+  font-size: 22rpx;
+  font-weight: 700;
 }
 
 .history-item + .history-item {
@@ -89,10 +116,99 @@
 
 .history-sub {
   margin-top: 8rpx;
-  color: #6b7280;
+  color: #7f7a91;
   font-size: 24rpx;
 }
 
-.pk-item + .pk-item {
-  margin-top: 12rpx;
+.pk-panel {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 10rpx 24rpx rgba(15, 23, 42, 0.05);
+}
+
+.pk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-bottom: 22rpx;
+}
+
+.pk-eyebrow {
+  font-size: 22rpx;
+  color: #9a92a8;
+}
+
+.pk-title {
+  margin-top: 4rpx;
+  color: #5f4657;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.pk-week {
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #f5efe7;
+  color: #9a7d5f;
+  font-size: 22rpx;
+}
+
+.pk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12rpx;
+}
+
+.pk-prize {
+  min-height: 150rpx;
+  border-radius: 20rpx;
+  padding: 18rpx 10rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.pk-prize.points {
+  background: #fff4d8;
+}
+
+.pk-prize.completion {
+  background: #e8f5ee;
+}
+
+.pk-prize.streak {
+  background: #edf2ff;
+}
+
+.pk-medal {
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  margin: 0 auto 12rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  color: #6d6678;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.pk-label {
+  color: #7f7a91;
+  font-size: 21rpx;
+}
+
+.pk-name {
+  margin-top: 8rpx;
+  color: #5f4657;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.pk-caption {
+  margin-top: 18rpx;
+  color: #9a92a8;
+  font-size: 22rpx;
+  line-height: 1.5;
 }

@@ -24,8 +24,18 @@ Page({
 
   async loadPage() {
     const bootstrap = await callApi('bootstrapFamily');
+    if (bootstrap.needsFamilySetup) {
+      wx.switchTab({ url: '/pages/mine/index' });
+      return;
+    }
     const childMembers = (bootstrap.members || []).filter((member) => member.isChild);
-    const currentChildId = getCurrentChildId() || this.data.currentChildId || (childMembers[0] && childMembers[0].memberId);
+    const storedChildId = getCurrentChildId() || this.data.currentChildId;
+    const currentChildId = childMembers.some((member) => member.memberId === storedChildId)
+      ? storedChildId
+      : (childMembers[0] && childMembers[0].memberId);
+    if (currentChildId) {
+      setCurrentChildId(currentChildId);
+    }
     const result = await callApi('getRewards', { childId: currentChildId });
     const currentChild = childMembers.find((member) => member.memberId === currentChildId) || childMembers[0] || {};
     const rewards = result.rewards || [];

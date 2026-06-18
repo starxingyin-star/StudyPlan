@@ -1,13 +1,18 @@
 const {
   collections,
-  DEFAULT_FAMILY_ID,
+  buildScopedId,
   getDocOrNull,
   setDoc
 } = require('../common/db');
+const { resolveFamilyAuth } = require('../common/family-service');
 const { verifyPin } = require('../common/pin-service');
 
-async function saveFamilySettings({ payload }) {
-  const family = await getDocOrNull(collections.families, DEFAULT_FAMILY_ID);
+async function saveFamilySettings({ payload, authContext }) {
+  const auth = await resolveFamilyAuth({
+    collections,
+    openid: authContext && authContext.openid
+  });
+  const family = await getDocOrNull(collections.families, auth.familyId);
   const storedPin = family ? family.parentPin : '2468';
 
   if (!verifyPin({ storedPin, enteredPin: payload.pin })) {
@@ -16,16 +21,16 @@ async function saveFamilySettings({ payload }) {
 
   const nextFamily = {
     ...(family || {}),
-    familyId: DEFAULT_FAMILY_ID,
+    familyId: auth.familyId,
     familyName: payload.familyName || (family && family.familyName) || '我们一家',
     parentPin: storedPin,
     pkEnabled: family ? family.pkEnabled : true,
     updatedAt: new Date().toISOString()
   };
 
-  await setDoc(collections.families, DEFAULT_FAMILY_ID, nextFamily);
+  await setDoc(collections.families, auth.familyId, nextFamily);
 
-  const existingMembersResult = await collections.members.where({ familyId: DEFAULT_FAMILY_ID }).get();
+  const existingMembersResult = await collections.members.where({ familyId: auth.familyId }).get();
   const nextMemberIds = new Set((payload.members || []).map((member) => member.memberId));
   for (const existingMember of existingMembersResult.data) {
     if (!nextMemberIds.has(existingMember.memberId)) {
@@ -38,14 +43,16 @@ async function saveFamilySettings({ payload }) {
   }
 
   for (const member of payload.members || []) {
-    await setDoc(collections.members, member.memberId, {
+    const memberId = member.memberId || buildScopedId(auth.familyId, `member-${Date.now()}`);
+    await setDoc(collections.members, memberId, {
       ...member,
-      familyId: DEFAULT_FAMILY_ID,
+      memberId,
+      familyId: auth.familyId,
       isActive: true
     });
   }
 
-  const existingRewardsResult = await collections.rewardRules.where({ familyId: DEFAULT_FAMILY_ID }).get();
+  const existingRewardsResult = await collections.rewardRules.where({ familyId: auth.familyId }).get();
   const nextRewardIds = new Set((payload.rewards || []).map((reward) => reward.rewardRuleId || `reward-${reward.sortOrder || Date.now()}`));
   for (const existingReward of existingRewardsResult.data) {
     if (!nextRewardIds.has(existingReward.rewardRuleId)) {
@@ -58,23 +65,23 @@ async function saveFamilySettings({ payload }) {
   }
 
   for (const reward of payload.rewards || []) {
-    const rewardRuleId = reward.rewardRuleId || `reward-${reward.sortOrder || Date.now()}`;
+    const rewardRuleId = reward.rewardRuleId || buildScopedId(auth.familyId, `reward-${reward.sortOrder || Date.now()}`);
     await setDoc(collections.rewardRules, rewardRuleId, {
       ...reward,
       rewardRuleId,
-      familyId: DEFAULT_FAMILY_ID,
+      familyId: auth.familyId,
       scopeType: reward.scopeType || 'family',
       childId: reward.childId || '',
       enabled: reward.enabled !== false
     });
   }
 
-  const refreshedMembers = await collections.members.where({ familyId: DEFAULT_FAMILY_ID }).get();
-  const refreshedRewards = await collections.rewardRules.where({ familyId: DEFAULT_FAMILY_ID }).get();
+  const refreshedMembers = await collections.members.where({ familyId: auth.familyId }).get();
+  const refreshedRewards = await collections.rewardRules.where({ familyId: auth.familyId }).get();
 
   return {
     ok: true,
-    familyId: DEFAULT_FAMILY_ID,
+    familyId: auth.familyId,
     family: nextFamily,
     members: refreshedMembers.data,
     rewards: refreshedRewards.data

@@ -18,6 +18,17 @@
   margin-bottom: 20rpx;
 }
 
+.pin-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 20rpx;
+  background: #f3f4f6;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+}
+
 .actions {
   display: flex;
   gap: 16rpx;

@@ -1,32 +1,44 @@
 const {
+  buildScopedId,
   collections,
-  DEFAULT_FAMILY_ID,
   getDocOrNull,
   setDoc
 } = require('../common/db');
+const { resolveFamilyAuth } = require('../common/family-service');
+const { resolveChildId } = require('../common/member-service');
 const { buildWeeklyPlanDraft } = require('../common/plan-service');
 const { verifyPin } = require('../common/pin-service');
 
-async function saveWeeklyPlan({ payload }) {
-  const family = await getDocOrNull(collections.families, DEFAULT_FAMILY_ID);
+async function saveWeeklyPlan({ payload, authContext }) {
+  const auth = await resolveFamilyAuth({
+    collections,
+    openid: authContext && authContext.openid
+  });
+  const family = await getDocOrNull(collections.families, auth.familyId);
 
   if (!verifyPin({ storedPin: family ? family.parentPin : '2468', enteredPin: payload.pin })) {
     throw new Error('Invalid PIN');
   }
 
+  const childId = await resolveChildId({
+    collections,
+    familyId: auth.familyId,
+    requestedChildId: payload.childId
+  });
+
   const draft = buildWeeklyPlanDraft({
-    childId: payload.childId,
+    childId,
     weekStartDate: payload.weekStartDate || '2026-05-25',
     templateId: payload.templateId || 'lower-grade-habits',
     focusHabits: payload.focusHabits || ['练字', '朗读'],
     tasksByDay: payload.tasksByDay || {}
   });
 
-  const weeklyPlanId = `${draft.childId}_${draft.weekStartDate}`;
+  const weeklyPlanId = buildScopedId(auth.familyId, `${draft.childId}_${draft.weekStartDate}`);
 
   await setDoc(collections.weeklyPlans, weeklyPlanId, {
     weeklyPlanId,
-    familyId: DEFAULT_FAMILY_ID,
+    familyId: auth.familyId,
     childId: draft.childId,
     weekStartDate: draft.weekStartDate,
     templateId: draft.templateId,
@@ -37,7 +49,7 @@ async function saveWeeklyPlan({ payload }) {
 
   try {
     await collections.dailyTasks.where({
-      familyId: DEFAULT_FAMILY_ID,
+      familyId: auth.familyId,
       weeklyPlanId
     }).remove();
   } catch (error) {
@@ -49,12 +61,12 @@ async function saveWeeklyPlan({ payload }) {
   for (const [date, tasks] of Object.entries(draft.days)) {
     persistedDays[date] = [];
     for (const task of tasks) {
-      const taskId = `${weeklyPlanId}_${date}_${task.sortOrder}`;
+      const taskId = buildScopedId(auth.familyId, `${weeklyPlanId}_${date}_${task.sortOrder}`);
       const nextTask = {
         ...task,
         dailyTaskId: taskId,
         weeklyPlanId,
-        familyId: DEFAULT_FAMILY_ID,
+        familyId: auth.familyId,
         childId: draft.childId,
         taskDate: date
       };
@@ -65,7 +77,7 @@ async function saveWeeklyPlan({ payload }) {
 
   return {
     ok: true,
-    childId: payload.childId,
+    childId,
     weekStartDate: draft.weekStartDate,
     days: persistedDays
   };

@@ -11,8 +11,16 @@ Component({
       this.setData({ value: event.detail.value });
     },
     onConfirm() {
-      this.triggerEvent('confirm', { pin: this.data.value });
-      this.setData({ value: '' });
+      const pin = String(this.data.value || '').trim();
+      if (!pin) {
+        wx.showToast({
+          title: '请输入家长密码',
+          icon: 'none'
+        });
+        return;
+      }
+
+      this.triggerEvent('confirm', { pin });
     },
     onCancel() {
       this.triggerEvent('cancel');
